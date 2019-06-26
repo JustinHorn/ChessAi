@@ -67,13 +67,13 @@ public class BoardUtils {
 	private static Figure find_Koenig(Board b, boolean white) {
 		for(int r = 0; r < 8; r++) {
 			for(int c=0; c < 8; c++) {
-				Figure rc = b.getFigure_at(r, c);
-				if(rc instanceof Koenig && rc.isWhite() == white) {
-					return rc;
+				Figure f = b.getFigure_at(r, c);
+				if(f instanceof Koenig && f.isWhite() == white) {
+					return f;
 				}
 			}
 		}
-		return new EmptyField();
+		throw new IllegalArgumentException("No Koenig");
 	}
 	
 	private static List<Figure> find_figures(Board b, boolean white) {
@@ -168,6 +168,38 @@ public class BoardUtils {
 			m.addAll(f.getMoves());
 		}
 		return m;
+	}
+	
+	public static void displayBoard(Board b) {
+		for(int i = 0; i < 8; i++ ) {
+			for(int j = 0; j < 8;j++) {
+				System.out.print(b.getFigure_at(i, j).firstChar());
+			}
+			System.out.println();
+		}
+	}
+	
+
+	
+	public static Figure char_toFigures(Board b, char sign, Position p) {
+		boolean isWhite = Character.isUpperCase(sign);
+		sign = Character.toUpperCase(sign);
+		if (sign == 'D') {
+			return new Dame(b,  isWhite);
+		} else if (sign == 'K') {
+			return new Koenig(b,  isWhite);
+		} else if (sign == 'L') {
+			return new Laeufer(b,  isWhite);
+		} else if (sign == 'S') {
+			return new Springer(b,  isWhite);
+		} else if (sign == 'B') {
+			return new Bauer(b,  isWhite);
+		} else if (sign == 'T') {
+			return new Turm(b,  isWhite);
+		} else if (sign == '-') {
+			return new EmptyField();
+		}
+		throw new IllegalArgumentException("Char at " + p + " does not match pattern: " + sign);
 	}
 
 	

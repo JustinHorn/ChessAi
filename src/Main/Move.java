@@ -1,6 +1,6 @@
 package Main;
 
-import Figures.Figure;
+import Figures.*;
 
 public class Move {
 	private Position fromPosition;
@@ -11,21 +11,28 @@ public class Move {
 	public Move(Board b, Position start, Position end) {
 		fromPosition = start;
 		toPosition = end;
-		if(start.equals(end)) {
-			throw new IllegalArgumentException("Start and End position of the move are the same");
-		}
 		movingFigure = b.getFigure_at(start);
 		defeatedFigure = b.getFigure_at(end);
+		errorHandling(movingFigure, defeatedFigure, start, end);
 	}
 	
 	public Move(Figure movingFigure,Figure defeatedFigure, Position start, Position end) {
 		fromPosition = start;
 		toPosition = end;
+		this.movingFigure = movingFigure;
+		this.defeatedFigure = defeatedFigure;
+		errorHandling(movingFigure, defeatedFigure, start, end);
+
+	}
+	
+	private void errorHandling(Figure movingFigure,Figure defeatedFigure, Position start, Position end ) {
 		if(start.equals(end)) {
 			throw new IllegalArgumentException("Start and End position of the move are the same");
 		}
-		this.movingFigure = movingFigure;
-		this.defeatedFigure = defeatedFigure;
+		if(movingFigure instanceof EmptyField) {
+			throw new IllegalArgumentException("An EmptyField can not make a move");
+		}
+	
 	}
 	
 	public Position fromPostion() {

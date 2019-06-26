@@ -5,7 +5,7 @@ import java.util.List;
 
 import Figures.*;
 
-public class Board {
+public class Board  {
 
 	private Figure[][] board = new Figure[8][8];
 	private boolean isWhitesTurn = true;
@@ -33,41 +33,16 @@ public class Board {
 		}
 	}
 	
-
 	private Figure[][] setBoard_from_charArray(char[][] b) {
 		Figure[][] f = new Figure[8][8];
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
-				f[i][j] = char_toFigures(b[i][j], new Position(i, j));
+				f[i][j] = BoardUtils.char_toFigures(this, b[i][j], new Position(i, j));
 			}
 		}
 		return f;
 	}
 
-
-	private Figure char_toFigures(char sign, Position p) {
-		boolean isUpper = Character.isUpperCase(sign);
-		sign = Character.toUpperCase(sign);
-		if (sign == 'D') {
-			return new Dame(this,  isUpper);
-		} else if (sign == 'K') {
-			return new Koenig(this,  isUpper);
-		} else if (sign == 'L') {
-			return new Laeufer(this,  isUpper);
-		} else if (sign == 'S') {
-			return new Springer(this,  isUpper);
-		} else if (sign == 'B') {
-			return new Bauer(this,  isUpper);
-		} else if (sign == 'T') {
-			return new Turm(this,  isUpper);
-		} else if (sign == '-') {
-			return new EmptyField();
-		}
-		throw new IllegalArgumentException("Char at " + p + " does not match pattern: " + sign);
-
-	}
-
-	
 	
 	public boolean isInBounds(int b) {
 		return (-1 < b) && (b <8 );
@@ -83,6 +58,7 @@ public class Board {
 	
 	public void makeMove(Move m) {
 		if(isMoveLegal(m) ) {
+			isWhitesTurn = ! isWhitesTurn;
 			changeBoard(m);
 			movesPlayed.add(m);
 		} else {
@@ -92,9 +68,11 @@ public class Board {
 	
 	public void takeMoveBack(Move m) {
 			reverseBoard(m);
+			isWhitesTurn = ! isWhitesTurn;
 			if(isMoveLegal(m)) {
 				movesPlayed.remove(m);
 			} else {
+				isWhitesTurn = ! isWhitesTurn;
 				changeBoard(m);
 				throw new IllegalArgumentException("Move has not been played: "+m);
 			}
@@ -102,15 +80,25 @@ public class Board {
 	}
 
 	public boolean isMoveLegal(Move m) {
+
 		if(isWhitesTurn != m.isWhite()) {
 			return false;
 		}
-		if(BoardUtils.is_ownKingThreathend_afterMove(this, m)) {
+		
+		List<Move> moves = m.getMovingFigure().getMoves();
+		moves.addAll(specialMoves(m.getMovingFigure()));
+		if(!moves.contains(m)) {
 			return false;
 		}
+		
 		return true;
 	}
 	
+	public List<Move> specialMoves(Figure movingFigure) {
+		// TODO Auto-generated method stub
+		return new LinkedList<Move>();
+	}
+
 	protected void changeBoard(Move m) {
 		Figure temp = board[m.fromPostion().getRow()][m.fromPostion().getCol()];
 		board[m.toPostion().getRow()][m.toPostion().getCol()] = temp;
@@ -130,11 +118,22 @@ public class Board {
 				}
 			}
 		}
-	//	throw new IllegalArgumentException("No Figure with Id: "+ figureID);
-		System.out.println(figureID);
-		return null;
+		throw new IllegalArgumentException("No Figure with Id: "+ figureID);
 	}
-	
 
-
+	@Override
+	public boolean equals(Object board) {
+		if(board instanceof Board) {
+			Board b = (Board)board;
+			for(int i = 0; i < 8;i++) {
+				for(int j = 0; j < 8;j++) {
+					if(b.getFigure_at(i,j).firstChar() != getFigure_at(i, j).firstChar()) {
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+		return false;
+	}
 }

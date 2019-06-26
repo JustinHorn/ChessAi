@@ -13,7 +13,9 @@ public class FigureUtils {
 		List<Move> moves = new LinkedList<Move>();
 		Board b = me.getBoard();
 		for(Figure f: accessableFigures) {
-			moves.add(new Move(me,f,b.getPosition_ofFigureWithId(me.getId()),b.getPosition_ofFigureWithId(f.getId())));
+			if(f instanceof EmptyField || f.isWhite() != me.isWhite()) {
+				moves.add(new Move(me,f,b.getPosition_ofFigureWithId(me.getId()),b.getPosition_ofFigureWithId(f.getId())));
+			}
 		}
 		
 		return moves;

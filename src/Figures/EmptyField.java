@@ -16,6 +16,11 @@ public class EmptyField extends Figure {
 	public Board getBoard() {
 		throw new IllegalAccessError("EmptyField is unaware of its board");
 	}
+	
+	@Override
+	public Position getPosition() {
+		throw new IllegalAccessError("EmptyField is unaware of its position");
+	}
 
 	@Override
 	public boolean isWhite() {
@@ -32,5 +37,9 @@ public class EmptyField extends Figure {
 	public List<Figure> getAccessableFigures(Position p) {
 		throw new IllegalAccessError("EmptyField has no accessable figures!");
 
+	}
+	
+	public char firstChar() {
+		return '-';
 	}
 }

@@ -36,4 +36,9 @@ public class Test_Move {
 		assertTrue(m1.getInversion().equals(m2));
 		
 	}
+	
+	@Test
+	void falseMove() {
+		
+	}
 }
