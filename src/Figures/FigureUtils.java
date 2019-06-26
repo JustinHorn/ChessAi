@@ -11,8 +11,9 @@ public class FigureUtils {
 	public static List<Move> movesInRange(Figure me) {
 		List<Figure> accessableFigures = me.getAccessableFigures();
 		List<Move> moves = new LinkedList<Move>();
+		Board b = me.getBoard();
 		for(Figure f: accessableFigures) {
-			moves.add(new Move(me,f,me.getPosition(),f.getPosition()));
+			moves.add(new Move(me,f,b.getPosition_ofFigureWithId(me.getId()),b.getPosition_ofFigureWithId(f.getId())));
 		}
 		
 		return moves;

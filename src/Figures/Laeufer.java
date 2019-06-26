@@ -9,23 +9,22 @@ import Main.Position;
 
 public class Laeufer extends Figure {
 	
-	public Laeufer(Board b, Position p, boolean isWhite) {
+	public Laeufer(Board b, boolean isWhite) {
+		super(b);
 		this.isWhite = isWhite;
-		board = b;
 		value = 3;
 		name = "Laeufer";
-		position = p;
 	}
 
-	@Override
-	public List<Move> getMoves() {
-		return new LinkedList<Move>();
-	}
 	
 	@Override
 	public List<Figure> getAccessableFigures() {
 		return GetAccessableFigures.laeuferMovement(this);
 	}
 	
+	@Override
+	public List<Figure> getAccessableFigures(Position p) {
+		return GetAccessableFigures.laeuferMovement(this.getBoard(),p);
+	}
 	
 }

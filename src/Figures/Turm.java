@@ -8,17 +8,11 @@ import Main.*;
 
 public class Turm extends Figure{
 	
-	public Turm(Board b, Position p, boolean isWhite) {
+	public Turm(Board b,  boolean isWhite) {
+		super(b);
 		this.isWhite = isWhite;
-		board = b;
 		value = 5;
 		name = "Turm";
-		position = p;
-	}
-
-	@Override
-	public List<Move> getMoves() {
-		return new LinkedList<Move>();
 	}
 	
 	@Override
@@ -26,6 +20,9 @@ public class Turm extends Figure{
 		return GetAccessableFigures.turmMovement(this);
 	}
 	
-	
+	@Override
+	public List<Figure> getAccessableFigures(Position p) {
+		return GetAccessableFigures.turmMovement(this.getBoard(),p);
+	}
 	
 }

@@ -58,9 +58,8 @@ public class BoardUtils {
 	}
 	
 	public static boolean is_ownKingThreathend_afterMove(Board b, Move m) {
-		Figure toBeMoved = b.getFigure_at(m.fromPostion());
 		b.changeBoard(m);
-		boolean illegal = is_koenig_check(b,toBeMoved.isWhite());
+		boolean illegal = is_koenig_check(b,m.isWhite());
 		b.reverseBoard(m);
 		return !illegal;
 	}	
@@ -74,7 +73,7 @@ public class BoardUtils {
 				}
 			}
 		}
-		return new EmptyField(new Position(0,0));
+		return new EmptyField();
 	}
 	
 	private static List<Figure> find_figures(Board b, boolean white) {
@@ -92,7 +91,9 @@ public class BoardUtils {
 
 	public static boolean is_koenig_check(Board b, boolean isWhite) {
 		Figure koenig = find_Koenig(b, isWhite);
+		
 		return threats_at_Position(b, koenig.getPosition(), isWhite).size() > 0;
+		
 	}
 	
 	public static boolean is_checkMate(Board b,boolean isWhite) {
@@ -101,35 +102,35 @@ public class BoardUtils {
 	
 	private static List<Figure> threats_at_Position(Board b, Position p, boolean isWhite) {
 		List<Figure> threats = new LinkedList<Figure>();
-		List<Figure> types_exceptBauer = setUpFigures_exceptBauer_andEmptyField(b,p,isWhite);
+		List<Figure> types_exceptBauer = setUpFigures_exceptBauer_andEmptyField(b, isWhite);
 		
 		
-		threats.addAll(addThreats_forEachFigure_exceptBauer(types_exceptBauer));
+		threats.addAll(addThreats_forEachFigure_exceptBauer(types_exceptBauer,p));
 		threats.addAll(addThreats_byBauer(b,p,isWhite));
 		
 		return threats;
 		
 	}
 	
-	private static List<Figure> setUpFigures_exceptBauer_andEmptyField(Board b, Position p, boolean isWhite) {
+	private static List<Figure> setUpFigures_exceptBauer_andEmptyField(Board b, boolean isWhite) {
 		List<Figure> types = new ArrayList<Figure>();
-		types.add(new Dame(b,p,isWhite));
-		types.add(new Laeufer(b,p,isWhite));
-		types.add(new Turm(b,p,isWhite));
-		types.add(new Springer(b,p,isWhite));
+		types.add(new Dame(b,isWhite));
+		types.add(new Laeufer(b,isWhite));
+		types.add(new Turm(b,isWhite));
+		types.add(new Springer(b,isWhite));
 		return types;
 	}
 	
-	private static List<Figure> addThreats_forEachFigure_exceptBauer(List<Figure> figures) {
+	private static List<Figure> addThreats_forEachFigure_exceptBauer(List<Figure> figures,Position p) {
 		List<Figure> threats = new LinkedList<Figure>();
 		for(Figure figure: figures) {
-			threats.addAll(getThreats_byFigure_exceptBauer(figure));
+			threats.addAll(getThreats_byFigure_exceptBauer(figure, p));
 		}
 		return threats;
 	}
 	
-	private static List<Figure> getThreats_byFigure_exceptBauer(Figure m) {
-		List<Figure> figure_moves = m.getAccessableFigures();
+	private static List<Figure> getThreats_byFigure_exceptBauer(Figure m, Position p) {
+		List<Figure> figure_moves = m.getAccessableFigures(p);
 		GetAccessableFigures.removeFriendlyFigures_and_EmptyFields(figure_moves, m.isWhite());
 		int i = 0;
 		while(i < figure_moves.size()) {

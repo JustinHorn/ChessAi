@@ -8,12 +8,11 @@ public class Move {
 	private Figure movingFigure;
 	private Figure defeatedFigure;
 	
-	
 	public Move(Board b, Position start, Position end) {
 		fromPosition = start;
 		toPosition = end;
 		if(start.equals(end)) {
-			throw new IllegalArgumentException("Start and End Position of the move are the same");
+			throw new IllegalArgumentException("Start and End position of the move are the same");
 		}
 		movingFigure = b.getFigure_at(start);
 		defeatedFigure = b.getFigure_at(end);
@@ -23,7 +22,7 @@ public class Move {
 		fromPosition = start;
 		toPosition = end;
 		if(start.equals(end)) {
-			throw new IllegalArgumentException("Start and End Position of the move are the same");
+			throw new IllegalArgumentException("Start and End position of the move are the same");
 		}
 		this.movingFigure = movingFigure;
 		this.defeatedFigure = defeatedFigure;
@@ -41,16 +40,20 @@ public class Move {
 		return movingFigure;
 	}
 	
-	public Figure getDefeatedFiugre() {
+	public Figure getDefeatedFigure() {
 		return defeatedFigure;
 	}
 	
+	public boolean isWhite( ) {
+		return movingFigure.isWhite();
+	}
 	
 	@Override
 	public boolean equals(Object move) {
 		if(move instanceof Move) {
 			Move m =(Move) move;
-			if(m.fromPosition.equals(fromPosition)&& m.toPosition.equals(toPosition)) {
+			if(m.fromPosition.equals(fromPosition)&& m.toPosition.equals(toPosition) 
+					&& movingFigure.equals(m.getMovingFigure())&& defeatedFigure.equals(defeatedFigure)) {
 				return true;
 			}
 		}

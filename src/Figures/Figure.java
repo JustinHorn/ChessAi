@@ -1,8 +1,8 @@
+
 package Figures;
-import java.util.Collections;
+
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import Main.*;
@@ -11,10 +11,17 @@ import Main.*;
 public abstract class Figure {
 	
 	protected boolean isWhite;
-	protected Board board;
+	private Board board;
 	protected int value;
 	protected String name;
-	protected Position position;
+	private static int count = 0;
+	private final int id;
+	
+	public Figure(Board b) {
+		id = count++;
+		board = b;
+	}
+	
 	
 	public List<Move> getMoves() {
 		List<Move> moves = FigureUtils.movesInRange(this);
@@ -23,6 +30,14 @@ public abstract class Figure {
 	}
 
 	abstract public List<Figure> getAccessableFigures();
+	
+	abstract public  List<Figure> getAccessableFigures(Position p);
+	
+
+	
+	public Position getPosition() {
+		return board.getPosition_ofFigureWithId(id);
+	}
 	
 	protected Board getBoard() {
 		return board;
@@ -40,17 +55,11 @@ public abstract class Figure {
 		return name;
 	}
 	
-	public Position getPosition() {
-		return position;
-	}
-	
-	public void setPosition(Position p) {
-		position = p;
+	public int getId() {
+		return id;
 	}
 	
 	public char firstChar() {
 		return name.charAt(0);
 	}
-	
-	
 }

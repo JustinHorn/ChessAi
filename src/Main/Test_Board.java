@@ -24,6 +24,7 @@ public class Test_Board {
 		return new Board(b);
 	}
 	
+	
 	@Test
 	void parseBoard_fromString() {
 		Board board = basicBoard();
@@ -38,6 +39,17 @@ public class Test_Board {
 		assertEquals(false,black_king.isWhite());
 		
 	}
+	
+	@Test
+	void test_getFigureById() {
+		Board board = basicBoard();
+		Figure white_Bauer = board.getFigure_at(0, 0);
+		Figure same_white_Bauer = board.getFigure_at( board.getPosition_ofFigureWithId(0));
+		
+		assertEquals(white_Bauer,same_white_Bauer);
+	}
+	
+	
 	
 	@Test
 	void changeBoard() {
@@ -91,5 +103,6 @@ public class Test_Board {
 		assertTrue(black_figures[3] instanceof Dame);
 		assertTrue(black_figures[4] instanceof Turm);
 	}
+	
 	
 }

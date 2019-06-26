@@ -31,8 +31,10 @@ public class GetAccessableFigures {
 	
 	
 	public static List<Figure> koenigMovement(Figure me) {
-		Position p = me.getPosition();
-		Board b = me.getBoard();
+		return koenigMovement(me.getBoard(),me.getPosition());
+	}
+	
+	public static List<Figure> koenigMovement(Board b, Position p) {
 		int r = p.getRow();
 		int c = p.getCol();
 		List<Figure> figures = new LinkedList<Figure>();
@@ -45,12 +47,12 @@ public class GetAccessableFigures {
 						figures.add(b.getFigure_at(r + i, c+j));
 		
 						
-		figures.remove(me);
-
+		figures.remove(b.getFigure_at(p));
 		return figures;
 	}
 
 	public static List<Figure> springerMovement(Figure me) {
+		Board b = me.getBoard();
 		return springerMovement(me.getBoard(),me.getPosition());
 	}
 	
@@ -78,8 +80,12 @@ public class GetAccessableFigures {
 
 
 	public static List<Figure> dameMovement(Figure me) {
-		List<Figure> turm = turmMovement(me);
-		List<Figure> lauefer = laeuferMovement(me);
+		return dameMovement(me.getBoard(),me.getPosition());
+	}
+	
+	public static List<Figure> dameMovement(Board b, Position p) {
+		List<Figure> turm = turmMovement(b,p);
+		List<Figure> lauefer = laeuferMovement(b,p);
 
 		turm.addAll(lauefer);
 		return turm;
