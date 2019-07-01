@@ -48,21 +48,6 @@ public class Test_Board {
 		assertEquals(white_Bauer, same_white_Bauer);
 	}
 
-	@Test
-	void changeBoard() {
-		Board board = basicBoard();
-
-		board.changeBoard(new Move(board, new Position(0, 7), new Position(7, 0)));
-
-		Figure nothing = board.getFigure_at(0, 7);
-		Figure white_king = board.getFigure_at(7, 0);
-
-		assertEquals("Koenig", white_king.getName());
-		assertTrue(white_king.isWhite());
-
-		assertTrue(nothing instanceof EmptyField);
-
-	}
 
 	@Test
 	void parseBoard_froMString() {
@@ -142,8 +127,8 @@ public class Test_Board {
 		Board b = secondKind();
 		Move turm2_left = new Move(b,new Position(1, 3), new Position(1,1));
 		
-		b.changeBoard(turm2_left);
-		b.reverseBoard(turm2_left);
+		b.makeChange(turm2_left);
+		b.reverseChange(turm2_left);
 		
 		Board b2 = secondKind();
 		assertTrue(b2.equals(b));
@@ -182,4 +167,115 @@ public class Test_Board {
 		}catch (Exception e) {}
 	}
 
+	private Board makeChange_board( ) {
+		char[][] charB = new char[8][8];
+		charB[0] = "T--KD---".toCharArray();
+		charB[1] = "--B-----".toCharArray();
+		charB[2] = "--------".toCharArray();
+		charB[3] = "-b------".toCharArray();
+		charB[4] = "--------".toCharArray();
+		charB[5] = "--------".toCharArray();
+		charB[6] = "B-------".toCharArray();
+		charB[7] = "----k--t".toCharArray();
+		
+		return new Board(charB);
+		
+	}
+
+
+	@Test
+	void test_makeChange_Rochade() {
+		Board b = makeChange_board();
+		
+		Koenig white_koenig = (Koenig) b.getFigure_at(0,3);
+		Turm white_turm = (Turm) b.getFigure_at(0, 0);
+		Move rochade = new Move(white_koenig,new EmptyField(),new Position(0,3),new Position(0,1),MoveTyp.Rochade,'K');
+		b.makeChange(rochade);
+		
+		assertEquals(white_koenig,b.getFigure_at(0,1));
+		assertEquals(white_turm,b.getFigure_at(0,2));
+	}
+	
+	@Test
+	void test_makeChange_EnPassant() {
+		Board b = makeChange_board();
+		
+		Bauer white_bauer = (Bauer) b.getFigure_at(1,2);
+		Bauer black_bauer = (Bauer) b.getFigure_at(3, 1);
+		Move twice = new Move(white_bauer,new EmptyField(),new Position(1,2),new Position(3,2),MoveTyp.Twice,'-');
+		b.makeChange(twice);
+		
+		assertEquals(white_bauer,b.getFigure_at(3,2));
+		
+		Move enPassant = new Move(black_bauer,white_bauer,new Position(3,1),new Position(2,2),MoveTyp.EnPassant,'-');
+		b.makeChange(enPassant);
+
+		assertEquals(black_bauer,b.getFigure_at(2,2));
+		assertTrue(b.getFigure_at(3,2) instanceof EmptyField);
+	}
+	
+
+	@Test
+	void test_makeChange_BauerToWhatEver() {
+		Board b = makeChange_board();
+		
+		Bauer white_bauer_atTheEnd = (Bauer) b.getFigure_at(6,0);
+		Move bauerTo = new Move(white_bauer_atTheEnd,new EmptyField(),new Position(6,0),new Position(7,0),MoveTyp.BauerTo,'D');
+		b.makeChange(bauerTo);
+		
+		assertTrue(b.getFigure_at(7,0) instanceof Dame);
+	}
+	
+
+
+
+	@Test
+	void test_reverseChange_Rochade() {
+		Board b = makeChange_board();
+		
+		Koenig white_koenig = (Koenig) b.getFigure_at(0,3);
+		Turm white_turm = (Turm) b.getFigure_at(0, 0);
+		Move rochade = new Move(white_koenig,new EmptyField(),new Position(0,3),new Position(0,1),MoveTyp.Rochade,'K');
+		b.makeChange(rochade);
+		
+		b.reverseChange(rochade);
+		assertEquals(white_koenig,b.getFigure_at(0,3));
+		assertEquals(white_turm,b.getFigure_at(0,0));
+	}
+	
+	@Test
+	void test_reverseChange_EnPassant() {
+		Board b = makeChange_board();
+		
+		Bauer white_bauer = (Bauer) b.getFigure_at(1,2);
+		Bauer black_bauer = (Bauer) b.getFigure_at(3, 1);
+		Move twice = new Move(white_bauer,new EmptyField(),new Position(1,2),new Position(3,2),MoveTyp.Twice,'-');
+		b.makeChange(twice);
+		Move enPassant = new Move(black_bauer,white_bauer,new Position(3,1),new Position(2,2),MoveTyp.EnPassant,'-');
+		
+		b.makeChange(enPassant);
+		b.reverseChange(enPassant);
+
+		assertEquals(black_bauer,b.getFigure_at(3,1));
+		assertTrue(b.getFigure_at(2,2) instanceof EmptyField);
+		assertEquals(white_bauer, b.getFigure_at(3,2));
+
+	}
+	
+
+	@Test
+	void test_reverseChange_BauerToWhatEver() {
+		Board b = makeChange_board();
+		
+		Bauer white_bauer_atTheEnd = (Bauer) b.getFigure_at(6,0);
+		Move bauerTo = new Move(white_bauer_atTheEnd,new EmptyField(),new Position(6,0),new Position(7,0),MoveTyp.BauerTo,'D');
+		b.makeChange(bauerTo);
+		b.reverseChange(bauerTo);
+
+		assertTrue(b.getFigure_at(7,0) instanceof EmptyField);
+		assertEquals(white_bauer_atTheEnd,b.getFigure_at(6,0));
+	}
+	
+	
+	
 }

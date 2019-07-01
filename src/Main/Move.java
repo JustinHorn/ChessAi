@@ -63,11 +63,11 @@ public class Move {
 	
 	}
 	
-	public Position fromPostion() {
+	public Position fromPosition() {
 		return fromPosition;
 	}
 	
-	public Position toPostion() {
+	public Position toPosition() {
 		return toPosition;
 	}
 

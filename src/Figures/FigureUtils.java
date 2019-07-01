@@ -21,15 +21,15 @@ public class FigureUtils {
 		return moves;
 	}
 
-	public List<Move> specialMoves(Figure moving, Board b) {
+	public static List<Move> getSpecialMove_of_Figure(Figure moving, Board b) {
 		List<Move> specialMoves = new LinkedList<Move>();
 		if (moving instanceof Bauer) {
-			specialMoves.addAll(getSpecialMovesOfBauer(b, moving));
+			specialMoves.addAll(getBauer_toSthMoves(b, moving));
 		}
 		return new LinkedList<Move>();
 	}
 
-	private List<Move> getSpecialMovesOfBauer(Board b, Figure moving) {
+	private static List<Move> getBauer_toSthMoves(Board b, Figure moving) {
 		boolean isWhite = moving.isWhite();
 		Position fP = b.getPosition_of_FigureWithId(moving.getId());
 		int upOrDown = isWhite ? 1 : -1;
@@ -55,15 +55,15 @@ public class FigureUtils {
 	
 	
 
-	private List<Move> addSpecialBauer_moves(Figure moving, Figure defeated, Board b) {
+	public static List<Move> addSpecialBauer_moves(Figure moving, Figure defeated, Board b) {
 		List<Move> specialMoves = new LinkedList<Move>();
 		Position positionM = b.getPosition_of_FigureWithId(moving.getId());
 		Position positionD = b.getPosition_of_FigureWithId(defeated.getId());
 
-		specialMoves.add(new Move(moving, defeated, positionM, positionD, MoveTyp.To, 'D'));
-		specialMoves.add(new Move(moving, defeated, positionM, positionD, MoveTyp.To, 'S'));
-		specialMoves.add(new Move(moving, defeated, positionM, positionD, MoveTyp.To, 'L'));
-		specialMoves.add(new Move(moving, defeated, positionM, positionD, MoveTyp.To, 'T'));
+		specialMoves.add(new Move(moving, defeated, positionM, positionD, MoveTyp.BauerTo, 'D'));
+		specialMoves.add(new Move(moving, defeated, positionM, positionD, MoveTyp.BauerTo, 'S'));
+		specialMoves.add(new Move(moving, defeated, positionM, positionD, MoveTyp.BauerTo, 'L'));
+		specialMoves.add(new Move(moving, defeated, positionM, positionD, MoveTyp.BauerTo, 'T'));
 		return specialMoves;
 	}
 
