@@ -37,7 +37,7 @@ public abstract class Figure {
 	
 	public Position getPosition() {
 		return board
-				.getPosition_ofFigureWithId(id);
+				.getPosition_of_FigureWithId(id);
 	}
 	
 	protected Board getBoard() {

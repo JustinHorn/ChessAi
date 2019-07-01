@@ -95,9 +95,10 @@ public class Board  {
 	}
 	
 	public List<Move> specialMoves(Figure movingFigure) {
-		// TODO Auto-generated method stub
+		
 		return new LinkedList<Move>();
 	}
+
 
 	protected void changeBoard(Move m) {
 		Figure temp = board[m.fromPostion().getRow()][m.fromPostion().getCol()];
@@ -110,7 +111,7 @@ public class Board  {
 		board[m.toPostion().getRow()][m.toPostion().getCol()] = m.getDefeatedFigure();
 	}
 
-	public Position getPosition_ofFigureWithId(int figureID) {
+	public Position getPosition_of_FigureWithId(int figureID) {
 		for(int i = 0; i < 8;i++) {
 			for(int j = 0; j < 8;j++) {
 				if(board[i][j].getId() == figureID) {

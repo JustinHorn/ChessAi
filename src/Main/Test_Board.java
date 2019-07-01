@@ -43,7 +43,7 @@ public class Test_Board {
 	void test_getFigureById() {
 		Board board = basicBoard();
 		Figure white_Bauer = board.getFigure_at(0, 0);
-		Figure same_white_Bauer = board.getFigure_at(board.getPosition_ofFigureWithId(white_Bauer.getId()));
+		Figure same_white_Bauer = board.getFigure_at(board.getPosition_of_FigureWithId(white_Bauer.getId()));
 
 		assertEquals(white_Bauer, same_white_Bauer);
 	}
@@ -122,7 +122,6 @@ public class Test_Board {
 		b[5] = "--------".toCharArray();
 		b[6] = "--------".toCharArray();
 		b[7] = "k-------".toCharArray();
-	
 		
 		return new Board(b);
 	}
@@ -158,17 +157,11 @@ public class Test_Board {
 		Move turm2_left = new Move(board,new Position(1, 3), new Position(1,1));
 		Move blackKoenig_up = new Move(board,new Position(7, 0), new Position(6,0));
 		Move turm1_schachMatt = new Move(board,new Position(0,2), new Position(0,0));
-		Move turm1_onturm2 = new Move(board,new Position(0,2), new Position(1,1));
-
 		
 		board.makeMove(turm2_left);
 		board.makeMove(blackKoenig_up);
-		
-		assertFalse(board.isMoveLegal(turm1_onturm2));
-		
-		board.makeMove(turm1_schachMatt);
-		
-		
+				
+		board.makeMove(turm1_schachMatt);		
 		
 		assertTrue(BoardUtils.is_blackKoenig_checkMate(board));
 	}

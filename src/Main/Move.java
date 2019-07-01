@@ -7,22 +7,50 @@ public class Move {
 	private Position toPosition;
 	private Figure movingFigure;
 	private Figure defeatedFigure;
-	
+	private MoveTyp type;
+	private char figure;
+
+
 	public Move(Board b, Position start, Position end) {
 		fromPosition = start;
 		toPosition = end;
 		movingFigure = b.getFigure_at(start);
 		defeatedFigure = b.getFigure_at(end);
+		type = MoveTyp.Normal;
+		figure = '-';
 		errorHandling(movingFigure, defeatedFigure, start, end);
 	}
+
+
+	public Move(Board b, Position start, Position end, MoveTyp kind,char f) {
+		fromPosition = start;
+		toPosition = end;
+		movingFigure = b.getFigure_at(start);
+		defeatedFigure = b.getFigure_at(end);
+		type =  kind;
+		figure = f;
+		errorHandling(movingFigure, defeatedFigure, start, end);
+	}
+	
 	
 	public Move(Figure movingFigure,Figure defeatedFigure, Position start, Position end) {
 		fromPosition = start;
 		toPosition = end;
 		this.movingFigure = movingFigure;
 		this.defeatedFigure = defeatedFigure;
+		type = MoveTyp.Normal;
+		figure = '-';
 		errorHandling(movingFigure, defeatedFigure, start, end);
-
+	}
+	
+	public Move(Figure movingFigure,Figure defeatedFigure, Position start, Position end,MoveTyp kind,char f) {
+		fromPosition = start;
+		toPosition = end;
+		this.movingFigure = movingFigure;
+		this.defeatedFigure = defeatedFigure;
+		type = kind;
+		figure = f;
+		errorHandling(movingFigure, defeatedFigure, start, end);
 	}
 	
 	private void errorHandling(Figure movingFigure,Figure defeatedFigure, Position start, Position end ) {
@@ -71,8 +99,13 @@ public class Move {
 	public String toString() {
 		return "from: "+fromPosition+" to: "+toPosition;
 	}
-	
-	public Move getInversion() {
-		return new Move(defeatedFigure,movingFigure, toPosition,fromPosition);
+
+	public MoveTyp getType() {
+		return type;
 	}
+
+	public char getFigure() {
+		return figure;
+	}
+
 }

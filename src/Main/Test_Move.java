@@ -33,7 +33,6 @@ public class Test_Move {
 		Move m2 = new Move(b,p2,p1);
 		
 		assertFalse(m1.equals(m2));
-		assertTrue(m1.getInversion().equals(m2));
 		
 	}
 	
