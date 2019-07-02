@@ -1,6 +1,8 @@
-package Main;
+package positionAndMove;
 
-import Figures.*;
+import abstractFigure.*;
+import board.Board;
+import figureTypes.EmptyField;
 
 public class Move {
 	private Position fromPosition;
@@ -8,49 +10,35 @@ public class Move {
 	private Figure movingFigure;
 	private Figure defeatedFigure;
 	private MoveTyp type;
-	private char figure;
-
+	private char typeModifier;
 
 	public Move(Board b, Position start, Position end) {
-		fromPosition = start;
-		toPosition = end;
-		movingFigure = b.getFigure_at(start);
-		defeatedFigure = b.getFigure_at(end);
-		type = MoveTyp.Normal;
-		figure = '-';
+		assignVars(b.getFigure_at(start), b.getFigure_at(end), start, end, MoveTyp.Normal, '-');
 		errorHandling(movingFigure, defeatedFigure, start, end);
 	}
-
 
 	public Move(Board b, Position start, Position end, MoveTyp kind,char f) {
-		fromPosition = start;
-		toPosition = end;
-		movingFigure = b.getFigure_at(start);
-		defeatedFigure = b.getFigure_at(end);
-		type =  kind;
-		figure = f;
+		assignVars(b.getFigure_at(start), b.getFigure_at(end), start, end, kind, f);
 		errorHandling(movingFigure, defeatedFigure, start, end);
 	}
 	
-	
 	public Move(Figure movingFigure,Figure defeatedFigure, Position start, Position end) {
-		fromPosition = start;
-		toPosition = end;
-		this.movingFigure = movingFigure;
-		this.defeatedFigure = defeatedFigure;
-		type = MoveTyp.Normal;
-		figure = '-';
+		assignVars(movingFigure, defeatedFigure, start, end, MoveTyp.Normal, '-');
 		errorHandling(movingFigure, defeatedFigure, start, end);
 	}
 	
 	public Move(Figure movingFigure,Figure defeatedFigure, Position start, Position end,MoveTyp kind,char f) {
+		assignVars(movingFigure, defeatedFigure, start, end, kind, f);
+		errorHandling(movingFigure, defeatedFigure, start, end);
+	}
+	
+	private void assignVars(Figure movingFigure,Figure defeatedFigure, Position start, Position end,MoveTyp kind,char f) {
 		fromPosition = start;
 		toPosition = end;
 		this.movingFigure = movingFigure;
 		this.defeatedFigure = defeatedFigure;
 		type = kind;
-		figure = f;
-		errorHandling(movingFigure, defeatedFigure, start, end);
+		typeModifier = f;
 	}
 	
 	private void errorHandling(Figure movingFigure,Figure defeatedFigure, Position start, Position end ) {
@@ -88,7 +76,8 @@ public class Move {
 		if(move instanceof Move) {
 			Move m =(Move) move;
 			if(m.fromPosition.equals(fromPosition)&& m.toPosition.equals(toPosition) 
-					&& movingFigure.equals(m.getMovingFigure())&& defeatedFigure.equals(defeatedFigure)) {
+					&& movingFigure.equals(m.getMovingFigure())&& defeatedFigure.equals(defeatedFigure)
+					&& m.getType() == type && m.getTypeModifier() == typeModifier) {
 				return true;
 			}
 		}
@@ -104,8 +93,8 @@ public class Move {
 		return type;
 	}
 
-	public char getFigure() {
-		return figure;
+	public char getTypeModifier() {
+		return typeModifier;
 	}
 
 }

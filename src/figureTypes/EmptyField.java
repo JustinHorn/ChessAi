@@ -1,7 +1,9 @@
-package Figures;
+package figureTypes;
 import java.util.List;
 
-import Main.*;
+import abstractFigure.Figure;
+import board.*;
+import positionAndMove.Position;
 
 public class EmptyField extends Figure {
 

@@ -1,11 +1,13 @@
 
-package Figures;
+package abstractFigure;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import Main.*;
+import board.*;
+import positionAndMove.Move;
+import positionAndMove.Position;
 
 
 public abstract class Figure {
@@ -26,6 +28,7 @@ public abstract class Figure {
 	public List<Move> getMoves() {
 		List<Move> moves = FigureUtils.movesInRange(this);
 		moves = moves.stream().filter(m -> BoardUtils.is_ownKingThreathend_afterMove(this.board, m)).collect(Collectors.toCollection(LinkedList<Move>::new));
+		moves.addAll(BoardUtils.getSpecialMoves_forMe(board, this));
 		return moves;
 	}
 

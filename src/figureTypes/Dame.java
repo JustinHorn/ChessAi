@@ -1,8 +1,11 @@
-package Figures;
+package figureTypes;
 
 import java.util.List;
 
-import Main.*;
+import abstractFigure.Figure;
+import abstractFigure.GetAccessableFigures;
+import board.*;
+import positionAndMove.Position;
 
 public class Dame extends Figure {
 

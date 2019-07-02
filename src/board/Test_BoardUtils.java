@@ -1,4 +1,4 @@
-package Main;
+package board;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -9,7 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import Figures.*;
+
+import abstractFigure.*;
+import positionAndMove.Move;
+import positionAndMove.MoveTyp;
+import positionAndMove.Position;
 
 public class Test_BoardUtils {
 	
@@ -138,7 +142,18 @@ public class Test_BoardUtils {
 		List<Move> sM = BoardUtils.getSpecialMoves_forMe(b, white_koenig);
 		assertEquals(1,sM.size());
 		assertEquals(MoveTyp.Rochade,sM.get(0).getType());
-		assertEquals('K',sM.get(0).getFigure());
+		assertEquals('K',sM.get(0).getTypeModifier());
+	}
+	
+	@Test
+	void test_getSpecialMoves_forMe_black_king() {
+		Board b = getBasic_specialMove_Board();
+		Figure black_koenig = b.getFigure_at(7, 3);
+		
+		List<Move> sM = BoardUtils.getSpecialMoves_forMe(b, black_koenig);
+		assertEquals(1,sM.size());
+		assertEquals(MoveTyp.Rochade,sM.get(0).getType());
+		assertEquals('D',sM.get(0).getTypeModifier());
 	}
 	
 	@Test
@@ -149,7 +164,7 @@ public class Test_BoardUtils {
 		List<Move> sM = BoardUtils.getSpecialMoves_forMe(b, white_bauer);
 		assertEquals(1,sM.size());
 		assertEquals(MoveTyp.Twice,sM.get(0).getType());
-		assertEquals('-',sM.get(0).getFigure());
+		assertEquals('-',sM.get(0).getTypeModifier());
 		Position expected = new Position(3, 3);
 		assertEquals(expected,sM.get(0).toPosition());
 	}
@@ -167,7 +182,7 @@ public class Test_BoardUtils {
 		
 		assertEquals(1,sM.size());
 		assertEquals(MoveTyp.EnPassant,sM.get(0).getType());
-		assertEquals('-',sM.get(0).getFigure());
+		assertEquals('-',sM.get(0).getTypeModifier());
 		Position expected = new Position(2, 3);
 		assertEquals(expected,sM.get(0).toPosition());
 	}
@@ -181,7 +196,7 @@ public class Test_BoardUtils {
 		
 		assertEquals(4,sM.size());
 		assertEquals(MoveTyp.BauerTo,sM.get(0).getType());
-		assertEquals('D',sM.get(0).getFigure());
+		assertEquals('D',sM.get(0).getTypeModifier());
 		Position expected = new Position(7, 0);
 		assertEquals(expected,sM.get(0).toPosition());
 	}

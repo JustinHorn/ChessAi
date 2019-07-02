@@ -1,9 +1,12 @@
-package Figures;
+package figureTypes;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import Main.*;
+import abstractFigure.Figure;
+import abstractFigure.GetAccessableFigures;
+import board.*;
+import positionAndMove.Position;
 
 
 public class Turm extends Figure{

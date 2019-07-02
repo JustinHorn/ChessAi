@@ -1,9 +1,11 @@
-package Main;
+package positionAndMove;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.jupiter.api.Test;
+
+import board.Board;
 
 public class Test_Move {
 

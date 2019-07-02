@@ -1,4 +1,4 @@
-package Main;
+package board;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -7,7 +7,17 @@ import static org.junit.Assert.fail;
 
 import org.junit.jupiter.api.Test;
 
-import Figures.*;
+import abstractFigure.*;
+import figureTypes.Bauer;
+import figureTypes.Dame;
+import figureTypes.EmptyField;
+import figureTypes.Koenig;
+import figureTypes.Laeufer;
+import figureTypes.Springer;
+import figureTypes.Turm;
+import positionAndMove.Move;
+import positionAndMove.MoveTyp;
+import positionAndMove.Position;
 
 public class Test_Board {
 
@@ -169,14 +179,14 @@ public class Test_Board {
 
 	private Board makeChange_board( ) {
 		char[][] charB = new char[8][8];
-		charB[0] = "T--KD---".toCharArray();
+		charB[0] = "T--K----".toCharArray();
 		charB[1] = "--B-----".toCharArray();
 		charB[2] = "--------".toCharArray();
 		charB[3] = "-b------".toCharArray();
 		charB[4] = "--------".toCharArray();
 		charB[5] = "--------".toCharArray();
 		charB[6] = "B-------".toCharArray();
-		charB[7] = "----k--t".toCharArray();
+		charB[7] = "---k---t".toCharArray();
 		
 		return new Board(charB);
 		
@@ -184,7 +194,7 @@ public class Test_Board {
 
 
 	@Test
-	void test_makeChange_Rochade() {
+	void test_makeChange_Rochade_white() {
 		Board b = makeChange_board();
 		
 		Koenig white_koenig = (Koenig) b.getFigure_at(0,3);
@@ -194,6 +204,19 @@ public class Test_Board {
 		
 		assertEquals(white_koenig,b.getFigure_at(0,1));
 		assertEquals(white_turm,b.getFigure_at(0,2));
+	}
+	
+	@Test
+	void test_makeChange_Rochade_black() {
+		Board b = makeChange_board();
+		
+		Koenig black_koenig = (Koenig) b.getFigure_at(7,3);
+		Turm black_turm = (Turm) b.getFigure_at(7, 7);
+		Move rochade = new Move(black_koenig,new EmptyField(),new Position(7,3),new Position(7,5),MoveTyp.Rochade,'D');
+		b.makeChange(rochade);
+		
+		assertEquals(black_koenig,b.getFigure_at(7,5));
+		assertEquals(black_turm,b.getFigure_at(7,4));
 	}
 	
 	@Test

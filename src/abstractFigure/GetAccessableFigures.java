@@ -1,11 +1,12 @@
-package Figures;
+package abstractFigure;
 
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import Main.Board;
-import Main.Position;
+import board.Board;
+import figureTypes.EmptyField;
+import positionAndMove.Position;
 
 /**
  * 

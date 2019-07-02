@@ -1,12 +1,21 @@
-package Main;
+package board;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
-import Figures.*;
+import abstractFigure.*;
+import figureTypes.Bauer;
+import figureTypes.Dame;
+import figureTypes.EmptyField;
+import figureTypes.Koenig;
+import figureTypes.Laeufer;
+import figureTypes.Springer;
+import figureTypes.Turm;
+import positionAndMove.Move;
+import positionAndMove.MoveTyp;
+import positionAndMove.Position;
 
 public class BoardUtils {
 
@@ -74,7 +83,7 @@ public class BoardUtils {
 				}
 			}
 		}
-		throw new IllegalArgumentException("No Koenig: "+(white?"white":"black"));
+		throw new IllegalArgumentException("No Koenig: " + (white ? "white" : "black"));
 	}
 
 	private static List<Figure> find_figures(Board b, boolean white) {
@@ -226,34 +235,40 @@ public class BoardUtils {
 		if (b.hasFigure_beenMoved(k.getId())) {
 
 		} else {
-			moves.addAll(getPossible_rochadeMove(b, k,myP, true));
-			moves.addAll(getPossible_rochadeMove(b, k,myP, false));
+			moves.addAll(get_ifPossible_rochadeMove(b, k, myP, true));
+			moves.addAll(get_ifPossible_rochadeMove(b, k, myP, false));
 		}
 		return moves;
 	}
 
-	private static List<Move> getPossible_rochadeMove(Board b, Figure me,Position myP, boolean leftOrRight) {
+	private static List<Move> get_ifPossible_rochadeMove(Board b, Figure me, Position myP, boolean leftOrRight) {
+		LinkedList<Move> m = new LinkedList<Move>();
+		if (rochadePossible(b, me, myP, leftOrRight)) {
+			boolean w = me.isWhite();
+			m.add(new Move(me, new EmptyField(), myP, new Position((w ? 0 : 7), 3 + (w ? -2 : +2)), MoveTyp.Rochade,
+					(leftOrRight ? 'K' : 'D')));
+		}
+		return m;
+	}
+
+	private static boolean rochadePossible(Board b, Figure me, Position myP, boolean leftOrRight) {
 		List<Figure> figures;
 		if (leftOrRight) {
 			figures = GetFigures_fromPositionTo._left_until_includeNotEmptyField(b, myP);
 		} else {
 			figures = GetFigures_fromPositionTo._right_until_includeNotEmptyField(b, myP);
 		}
+		return isTurmAlright(b, me, leftOrRight) && areRochadeFieldsEmpty(figures)
+				&& are_fields_unthreadend(b, figures, me.isWhite());
+	}
+
+	private static boolean isTurmAlright(Board b, Figure me, boolean leftOrRight) {
 		int row = (me.isWhite() ? 0 : 7);
 		int turmCol = (leftOrRight ? 0 : 7);
 
 		Figure turm = b.getFigure_at(row, turmCol);
-		LinkedList<Move> m = new LinkedList<Move>();
-
-		if (turm instanceof Turm && turm.isWhite() == me.isWhite()&& areRochadeFieldsEmpty(figures) && are_fields_unthreadend(b, figures, me.isWhite())
-				&& !b.hasFigure_beenMoved(turm.getId())) {
-				m.add(new Move(me, new EmptyField(), myP, new Position(row, 3+(me.isWhite()?-2:+2)), MoveTyp.Rochade, 'K'));
-			
-		}
-		return m;
+		return turm instanceof Turm && turm.isWhite() == me.isWhite() && !b.hasFigure_beenMoved(turm.getId());
 	}
-	
-	
 
 	private static boolean areRochadeFieldsEmpty(List<Figure> horizontalLineOfFigures) {
 		List<Figure> figures = horizontalLineOfFigures;
@@ -292,31 +307,26 @@ public class BoardUtils {
 			Move lastMove = b.getLastMove();
 			if (lastMove.getType() == MoveTyp.Twice) {
 				Position bauer_twice = b.getPosition_of_FigureWithId(lastMove.getMovingFigure().getId());
-				if (bauer_twice.getRow() == myP.getRow()) {
-					if (myP.getCol() - 1 == bauer_twice.getCol()) {
-						moves.add(new Move(me, lastMove.getMovingFigure(), myP,
-								new Position(bauer_twice.getRow() + upOrDown, bauer_twice.getCol()), MoveTyp.EnPassant,
-								'-'));
-					}
-					if (myP.getCol() + 1 == bauer_twice.getCol()) {
-						moves.add(new Move(me, lastMove.getMovingFigure(), myP,
-								new Position(bauer_twice.getRow() + upOrDown, bauer_twice.getCol()), MoveTyp.EnPassant,
-								'-'));
+				int bTCol = bauer_twice.getCol();
+				int bTRow = bauer_twice.getRow();
+				if (bTRow == myP.getRow()) {
+					for (int i : new int[] { -1, 1 }) {
+						if (myP.getCol() + i == bTCol) {
+							moves.add(new Move(me, lastMove.getMovingFigure(), myP,
+									new Position(bTRow + upOrDown,bTCol),
+									MoveTyp.EnPassant, '-'));
+						}
 					}
 				}
 			}
 		}
 		if (myP.getRow() == nearEnd) {
-			if (b.isInBounds(myP.getCol() - 1)) {
-				Figure x = b.getFigure_at(myP.getRow() + upOrDown, myP.getCol() - 1);
-				if (!(x instanceof EmptyField) && x.isWhite() != me.isWhite()) {
-					moves.addAll(FigureUtils.addSpecialBauer_moves(me, x, b));
-				}
-			}
-			if (b.isInBounds(myP.getCol() + 1)) {
-				Figure x = b.getFigure_at(myP.getRow() + upOrDown, myP.getCol() + 1);
-				if (!(x instanceof EmptyField) && x.isWhite() != me.isWhite()) {
-					moves.addAll(FigureUtils.addSpecialBauer_moves(me, x, b));
+			for (int i : new int[] { -1, +1 }) {
+				if (b.isInBounds(myP.getCol() + i)) {
+					Figure x = b.getFigure_at(myP.getRow() + upOrDown, myP.getCol() + i);
+					if (!(x instanceof EmptyField) && x.isWhite() != me.isWhite()) {
+						moves.addAll(FigureUtils.addSpecialBauer_moves(me, x, b));
+					}
 				}
 			}
 			Figure x = b.getFigure_at(myP.getRow() + upOrDown, myP.getCol());
@@ -331,7 +341,7 @@ public class BoardUtils {
 		List<Move> l = new LinkedList<Move>();
 		if (onStartingPosition_and_nextToFieldsAreEmpty(b, me, myP)) {
 			l.add(new Move(me, new EmptyField(), myP,
-					new Position(myP.getRow() + 2 * (me.isWhite() ? +1 : -1), myP.getCol()),MoveTyp.Twice,'-'));
+					new Position(myP.getRow() + 2 * (me.isWhite() ? +1 : -1), myP.getCol()), MoveTyp.Twice, '-'));
 		}
 		return l;
 	}

@@ -1,9 +1,14 @@
-package Main;
+package board;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import Figures.*;
+import abstractFigure.*;
+import figureTypes.EmptyField;
+import figureTypes.Koenig;
+import figureTypes.Turm;
+import positionAndMove.Move;
+import positionAndMove.Position;
 
 public class Board {
 
@@ -43,7 +48,7 @@ public class Board {
 		return f;
 	}
 
-	public boolean isInBounds(int b) {
+	public static boolean isInBounds(int b) {
 		return (-1 < b) && (b < 8);
 	}
 
@@ -76,13 +81,11 @@ public class Board {
 	}
 
 	public boolean isMoveLegal(Move m) {
-
 		if (isWhitesTurn != m.isWhite()) {
 			return false;
 		}
-
 		List<Move> moves = m.getMovingFigure().getMoves();
-		moves.addAll(specialMoves(m.getMovingFigure()));
+		moves.addAll(BoardUtils.getSpecialMoves_forMe(this,m.getMovingFigure()));
 		if (!moves.contains(m)) {
 			return false;
 		}
@@ -99,32 +102,25 @@ public class Board {
 		return false;
 	}
 
-	public List<Move> specialMoves(Figure movingFigure) {
-
-		return new LinkedList<Move>();
-	}
-
 	protected void makeChange(Move m) {
 		switch (m.getType()) {
 		case EnPassant:
 			board[m.toPosition().getRow() + (m.isWhite() ? -1 : 1)][m.toPosition().getCol()] = new EmptyField();
 		case Normal:
 		case Twice:
-			board[m.toPosition().getRow()][m.toPosition().getCol()] = m.getMovingFigure();
-			board[m.fromPosition().getRow()][m.fromPosition().getCol()] = new EmptyField();
+			assignFigures_toBoard(m,m.getMovingFigure(),new EmptyField());
 			break;
 		case Rochade:
-			int lOrR = (m.getFigure() == 'K' ? +1 : -1);
+			int lOrR = (m.getTypeModifier() == 'K' ? +1 : -1);
 			int row = (m.isWhite() ? 0 : 7);
-			Turm turm = (Turm) getFigure_at(row, (m.getFigure() == 'K' ? 0 : 7));
+			Turm turm = (Turm) getFigure_at(row, (m.getTypeModifier() == 'K' ? 0 : 7));
 			Koenig koenig = (Koenig) getFigure_at(row, 3);
 			board[m.toPosition().getRow()][m.toPosition().getCol()] = koenig;
 			board[m.toPosition().getRow()][m.toPosition().getCol() + lOrR] = turm;
 			break;
 		case BauerTo:
-			Figure whateverTheBauerTurnsTo = BoardUtils.returnFigure(this, m.getFigure(), m.isWhite());
-			board[m.toPosition().getRow()][m.toPosition().getCol()] = whateverTheBauerTurnsTo;
-			board[m.fromPosition().getRow()][m.fromPosition().getCol()] = new EmptyField();
+			Figure whateverTheBauerTurnsTo = BoardUtils.returnFigure(this, m.getTypeModifier(), m.isWhite());
+			assignFigures_toBoard(m,whateverTheBauerTurnsTo,new EmptyField());
 			break;
 		default:
 			throw new IllegalArgumentException("Something happend to that move");
@@ -136,27 +132,29 @@ public class Board {
 		switch (m.getType()) {
 		case EnPassant:
 			board[m.toPosition().getRow() + (m.isWhite() ? -1 : 1)][m.toPosition().getCol()] = m.getDefeatedFigure();
-			board[m.toPosition().getRow()][m.toPosition().getCol()] = new EmptyField();
-			board[m.fromPosition().getRow()][m.fromPosition().getCol()] = m.getMovingFigure();
+			assignFigures_toBoard(m,new EmptyField(),m.getMovingFigure());
 			break;
 		case BauerTo:
 		case Normal:
 		case Twice:
-			board[m.toPosition().getRow()][m.toPosition().getCol()] = m.getDefeatedFigure();
-			board[m.fromPosition().getRow()][m.fromPosition().getCol()] = m.getMovingFigure();
+			assignFigures_toBoard(m,m.getDefeatedFigure(),m.getMovingFigure());
 			break;
 		case Rochade:
-			int lOrR = (m.getFigure() == 'K' ? +1 : -1);
 			int row = (m.isWhite() ? 0 : 7);
-			Turm turm = (Turm) getFigure_at(row, (m.getFigure() == 'K' ? 0 : 7));
+			Turm turm = (Turm) getFigure_at(row, (m.getTypeModifier() == 'K' ? 0 : 7));
 			Koenig koenig = (Koenig) getFigure_at(row, 3);
 			board[m.fromPosition().getRow()][m.fromPosition().getCol()] = koenig;
-			board[m.toPosition().getRow()][(m.getFigure() == 'K' ? 0 : 7)] = turm;
+			board[m.toPosition().getRow()][(m.getTypeModifier() == 'K' ? 0 : 7)] = turm;
 			break;
 		default:
 			throw new IllegalArgumentException("Something happend to that move");
 		}
 		movesPlayed.remove(m);
+	}
+	
+	private void assignFigures_toBoard(Move m, Figure toPosition, Figure fromPosition) {
+		board[m.toPosition().getRow()][m.toPosition().getCol()] =  toPosition;
+		board[m.fromPosition().getRow()][m.fromPosition().getCol()] = fromPosition;
 	}
 
 	public Position getPosition_of_FigureWithId(int figureID) {

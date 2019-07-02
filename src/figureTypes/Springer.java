@@ -1,11 +1,13 @@
-package Figures;
+package figureTypes;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import Main.Board;
-import Main.Move;
-import Main.Position;
+import abstractFigure.Figure;
+import abstractFigure.GetAccessableFigures;
+import board.Board;
+import positionAndMove.Move;
+import positionAndMove.Position;
 
 public class Springer extends Figure{
 	
