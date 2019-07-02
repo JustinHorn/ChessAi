@@ -1,31 +1,33 @@
-package figureTypes;
+package figureWithIn;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import abstractFigure.Figure;
 import abstractFigure.GetAccessableFigures;
-import board.Board;
-import positionAndMove.Move;
+import board.*;
 import positionAndMove.Position;
 
-public class Springer extends Figure{
+public class Koenig extends Figure{
 	
-	public Springer(Board b,  boolean isWhite) {
+	public Koenig(Board b,  boolean isWhite) {
 		super(b);
 		this.isWhite = isWhite;
-		value = 3;
-		name = "Springer";
+		value = Integer.MAX_VALUE;
+		name = "Koenig";
 	}
 
+
+	
 	@Override
 	public List<Figure> getAccessableFigures() {
 		// TODO Auto-generated method stub
-		return GetAccessableFigures.springerMovement(this);
+		return GetAccessableFigures.koenigMovement(this);
 	}
 	
 	@Override
 	public List<Figure> getAccessableFigures(Position p) {
-		return GetAccessableFigures.springerMovement(this.getBoard(),p);
+		return GetAccessableFigures.koenigMovement(this.getBoard(),p);
 	}
+
 }

@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import board.Board;
-import figureTypes.EmptyField;
+import figureWithIn.EmptyField;
 import positionAndMove.Move;
 import positionAndMove.Position;
 

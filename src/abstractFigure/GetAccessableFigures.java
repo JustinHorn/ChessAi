@@ -1,11 +1,12 @@
 package abstractFigure;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import board.Board;
-import figureTypes.EmptyField;
+import figureWithIn.EmptyField;
 import positionAndMove.Position;
 
 /**
@@ -17,17 +18,20 @@ public class GetAccessableFigures {
 	
 	/**
 	 * Also: List = OutputArgument!
+	 * @return 
 	 */
-	public static void removeFriendlyFigures_and_EmptyFields(List<Figure> list, boolean white_team_friendly) {
-		int i = 0;
-		while(i < list.size()) {
-			Figure f = list.get(i);
+	public static List<Figure> removeFriendlyFigures_and_EmptyFields(List<Figure> list, boolean white_team_friendly) {
+		List<Figure> hostile = new LinkedList<Figure>();
+		Iterator<Figure> it = list.iterator();
+		while(it.hasNext()) {
+			Figure f = it.next();
 			if ((f instanceof EmptyField) || f.isWhite() == white_team_friendly) {
-				list.remove(f);
+				
 			}else {
-				i++;
+				hostile.add(f);
 			}
 		}
+		return hostile;
 	}
 	
 	
@@ -122,35 +126,45 @@ public class GetAccessableFigures {
 	}
 
 	public static List<Figure> bauerMovement(Board board, Position position, boolean isWhite) {
-		int direction = isWhite ? 1 : -1;
-		int r = position.getRow() + direction;
-		int c = position.getCol();
-
 		List<Figure> figures = new LinkedList<Figure>();
-
-		Figure figure_infront = board.getFigure_at(r, c);
-		if (figure_infront instanceof EmptyField) {
-			figures.add(figure_infront);
+		
+		int edge = (isWhite?6:1);
+		
+		if( position.getRow() != edge) {
+			int direction = isWhite ? 1 : -1;
+			int r = position.getRow() + direction;
+			int c = position.getCol();
+			figures.addAll(getFigures(board,  r, c, isWhite));
 		}
-
-		addAttackFigure_Bauer(board, figures, r, c , isWhite);
-
 		return figures;
 	}
 	
-	public static void addAttackFigure_Bauer(Board board,List<Figure> add_atttackFigureList_here ,int r,int c, boolean isWhite) {
-		checkBauer_leftRight_updateFront(board, add_atttackFigureList_here, r, c + 1, isWhite);
-		checkBauer_leftRight_updateFront(board, add_atttackFigureList_here, r, c - 1, isWhite);
+	private static 	List<Figure> getFigures(Board board,int r,int c, boolean isWhite) {
+		List<Figure> f = new LinkedList<Figure>();
+		Figure figure_infront = board.getFigure_at(r, c);
+		if (figure_infront instanceof EmptyField) {
+			f.add(figure_infront);
+		}
+		f.addAll(addAttackFigure_Bauer(board,  r, c, isWhite));
+		return f;
+	}
+	
+	public static List<Figure> addAttackFigure_Bauer(Board board,int r,int c, boolean isWhite) {
+		List<Figure> f = new LinkedList<Figure>();
+		f.addAll(checkBauer_leftRight_updateFront(board, r, c + 1, isWhite));
+		f.addAll(checkBauer_leftRight_updateFront(board, r, c - 1, isWhite));
+		return f;
 	}
 
-	private static void checkBauer_leftRight_updateFront(Board b, List<Figure> output_argument_f, int r, int c,
-			boolean boolWhite) {
+	private static List<Figure> checkBauer_leftRight_updateFront(Board b, int r, int c,boolean boolWhite) {
+		List<Figure> figures = new LinkedList<Figure>();
 		if (b.isInBounds(c)) {
 			Figure figure_front_right = b.getFigure_at(r, c);
 			if (!(figure_front_right instanceof EmptyField) && figure_front_right.isWhite() != boolWhite) {
-				output_argument_f.add(figure_front_right);
+				figures.add(figure_front_right);
 			}
 		}
+		return figures;
 	}
 
 	public static List<Figure> leftToRightDiagonal(Figure me) {

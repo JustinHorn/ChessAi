@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import board.*;
+import figureWithIn.EmptyField;
 import positionAndMove.Move;
 import positionAndMove.Position;
 
@@ -27,15 +28,18 @@ public abstract class Figure {
 	
 	public List<Move> getMoves() {
 		List<Move> moves = FigureUtils.movesInRange(this);
+		moves.addAll(GetSpecialMoves_FromBoard.getMySpecialMoves(board, this));
 		moves = moves.stream().filter(m -> BoardUtils.is_ownKingThreathend_afterMove(this.board, m)).collect(Collectors.toCollection(LinkedList<Move>::new));
-		moves.addAll(BoardUtils.getSpecialMoves_forMe(board, this));
 		return moves;
 	}
 
 	abstract public List<Figure> getAccessableFigures();
 	
-	abstract public  List<Figure> getAccessableFigures(Position p);
+	abstract public List<Figure> getAccessableFigures(Position p);
 	
+	public static List<Figure> getAccessableFigures(Board b, Position p, boolean isWhite) {
+		return new LinkedList<Figure>();
+	}
 
 	
 	public Position getPosition() {
@@ -64,6 +68,11 @@ public abstract class Figure {
 	}
 	
 	public char firstChar() {
-		return name.charAt(0);
+		if(this instanceof EmptyField) {
+			return '-';
+		}
+		char s = name.charAt(0);
+		if(isWhite == false) s = Character.toLowerCase(s);
+		return s;
 	}
 }

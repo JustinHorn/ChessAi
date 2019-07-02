@@ -2,7 +2,7 @@ package positionAndMove;
 
 import abstractFigure.*;
 import board.Board;
-import figureTypes.EmptyField;
+import figureWithIn.EmptyField;
 
 public class Move {
 	private Position fromPosition;

@@ -9,11 +9,11 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import board.*;
-import figureTypes.Bauer;
-import figureTypes.Dame;
-import figureTypes.Laeufer;
-import figureTypes.Springer;
-import figureTypes.Turm;
+import figureWithIn.Bauer;
+import figureWithIn.Dame;
+import figureWithIn.Laeufer;
+import figureWithIn.Springer;
+import figureWithIn.Turm;
 import positionAndMove.Position;
 
 public class Test_GetFigures_fromPositionTo {

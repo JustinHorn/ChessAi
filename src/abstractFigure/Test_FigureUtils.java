@@ -8,7 +8,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import board.*;
-import figureTypes.Laeufer;
+import figureWithIn.Laeufer;
 import positionAndMove.Move;
 
 

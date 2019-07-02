@@ -9,7 +9,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import board.Board;
-import figureTypes.EmptyField;
+import figureWithIn.EmptyField;
 
 public class Test_GetAccessableFigures {
 	

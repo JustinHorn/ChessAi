@@ -1,5 +1,6 @@
-package figureTypes;
+package figureWithIn;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import abstractFigure.Figure;
@@ -24,6 +25,10 @@ public class Bauer extends Figure {
 	@Override
 	public List<Figure> getAccessableFigures(Position p) {
 		return GetAccessableFigures.bauerMovement(getBoard(),p,isWhite);
+	}
+	
+	public static List<Figure> getAccessableFigures(Board b, Position p, boolean isWhite) {
+		return GetAccessableFigures.bauerMovement(b,p,isWhite);
 	}
 	
 }

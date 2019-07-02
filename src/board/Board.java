@@ -4,9 +4,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import abstractFigure.*;
-import figureTypes.EmptyField;
-import figureTypes.Koenig;
-import figureTypes.Turm;
+import figureWithIn.EmptyField;
+import figureWithIn.Koenig;
+import figureWithIn.Turm;
 import positionAndMove.Move;
 import positionAndMove.Position;
 
@@ -31,11 +31,16 @@ public class Board {
 	}
 
 	public Board() {
-		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 8; j++) {
-				board[i][j] = new EmptyField();
-			}
-		}
+		char[][] b = new char[8][8];
+		b[0] = "TSLKDLST".toCharArray();
+		b[1] = "BBBBBBBB".toCharArray();
+		b[2] = "--------".toCharArray();
+		b[3] = "--------".toCharArray();
+		b[4] = "--------".toCharArray();
+		b[5] = "--------".toCharArray();
+		b[6] = "bbbbbbbb".toCharArray();
+		b[7] = "tslkdlst".toCharArray();
+		board = setBoard_from_charArray(b);	
 	}
 
 	private Figure[][] setBoard_from_charArray(char[][] b) {
@@ -85,7 +90,7 @@ public class Board {
 			return false;
 		}
 		List<Move> moves = m.getMovingFigure().getMoves();
-		moves.addAll(BoardUtils.getSpecialMoves_forMe(this,m.getMovingFigure()));
+		moves.addAll(GetSpecialMoves_FromBoard.getMySpecialMoves(this,m.getMovingFigure()));
 		if (!moves.contains(m)) {
 			return false;
 		}
@@ -112,11 +117,15 @@ public class Board {
 			break;
 		case Rochade:
 			int lOrR = (m.getTypeModifier() == 'K' ? +1 : -1);
-			int row = (m.isWhite() ? 0 : 7);
-			Turm turm = (Turm) getFigure_at(row, (m.getTypeModifier() == 'K' ? 0 : 7));
-			Koenig koenig = (Koenig) getFigure_at(row, 3);
-			board[m.toPosition().getRow()][m.toPosition().getCol()] = koenig;
-			board[m.toPosition().getRow()][m.toPosition().getCol() + lOrR] = turm;
+			Turm turm = (Turm) getFigure_at(m.fromPosition().getRow(), (m.getTypeModifier() == 'K' ? 0 : 7));
+			Koenig koenig = (Koenig) getFigure_at(m.fromPosition().getRow(), 3);
+			
+			board[m.fromPosition().getRow()][m.fromPosition().getCol()] = new EmptyField();
+			board[m.fromPosition().getRow()][(m.getTypeModifier() == 'K' ? 0 : 7)]= new EmptyField();
+			
+			board[m.fromPosition().getRow()][m.toPosition().getCol()] = koenig;
+			board[m.fromPosition().getRow()][m.toPosition().getCol() + lOrR] = turm;
+			
 			break;
 		case BauerTo:
 			Figure whateverTheBauerTurnsTo = BoardUtils.returnFigure(this, m.getTypeModifier(), m.isWhite());
@@ -140,11 +149,16 @@ public class Board {
 			assignFigures_toBoard(m,m.getDefeatedFigure(),m.getMovingFigure());
 			break;
 		case Rochade:
-			int row = (m.isWhite() ? 0 : 7);
-			Turm turm = (Turm) getFigure_at(row, (m.getTypeModifier() == 'K' ? 0 : 7));
-			Koenig koenig = (Koenig) getFigure_at(row, 3);
+			int lOrR = (m.getTypeModifier() == 'K' ? +1 : -1);
+
+			Turm turm = (Turm) getFigure_at(m.fromPosition().getRow(), m.toPosition().getCol() + lOrR);
+			Koenig koenig = (Koenig) getFigure_at(m.fromPosition().getRow(), 3-2*lOrR);
+			
+			board[m.fromPosition().getRow()][m.toPosition().getCol()] = new EmptyField();
+			board[m.fromPosition().getRow()][m.toPosition().getCol() + lOrR] = new EmptyField();
+			
 			board[m.fromPosition().getRow()][m.fromPosition().getCol()] = koenig;
-			board[m.toPosition().getRow()][(m.getTypeModifier() == 'K' ? 0 : 7)] = turm;
+			board[m.fromPosition().getRow()][(m.getTypeModifier() == 'K' ? 0 : 7)] = turm;
 			break;
 		default:
 			throw new IllegalArgumentException("Something happend to that move");

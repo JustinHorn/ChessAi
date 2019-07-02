@@ -1,4 +1,4 @@
-package figureTypes;
+package figureWithIn;
 
 import java.util.LinkedList;
 import java.util.List;

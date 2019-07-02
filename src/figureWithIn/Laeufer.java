@@ -1,33 +1,32 @@
-package figureTypes;
+package figureWithIn;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import abstractFigure.Figure;
 import abstractFigure.GetAccessableFigures;
-import board.*;
+import board.Board;
+import positionAndMove.Move;
 import positionAndMove.Position;
 
-public class Koenig extends Figure{
+public class Laeufer extends Figure {
 	
-	public Koenig(Board b,  boolean isWhite) {
+	public Laeufer(Board b, boolean isWhite) {
 		super(b);
 		this.isWhite = isWhite;
-		value = Integer.MAX_VALUE;
-		name = "Koenig";
+		value = 3;
+		name = "Laeufer";
 	}
-
 
 	
 	@Override
 	public List<Figure> getAccessableFigures() {
-		// TODO Auto-generated method stub
-		return GetAccessableFigures.koenigMovement(this);
+		return GetAccessableFigures.laeuferMovement(this);
 	}
 	
 	@Override
 	public List<Figure> getAccessableFigures(Position p) {
-		return GetAccessableFigures.koenigMovement(this.getBoard(),p);
+		return GetAccessableFigures.laeuferMovement(this.getBoard(),p);
 	}
-
+	
 }
