@@ -1,6 +1,7 @@
 package positionAndMove;
 
 import abstractFigure.*;
+import abstractFigure.Figure.Team;
 import board.Board;
 import figureWithIn.EmptyField;
 
@@ -67,8 +68,8 @@ public class Move {
 		return defeatedFigure;
 	}
 	
-	public boolean isWhite( ) {
-		return movingFigure.isWhite();
+	public Team getTeam( ) {
+		return movingFigure.getTeam();
 	}
 	
 	@Override

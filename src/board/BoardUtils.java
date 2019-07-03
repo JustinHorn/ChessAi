@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import abstractFigure.*;
+import abstractFigure.Figure.Team;
 import figureWithIn.Bauer;
 import figureWithIn.Dame;
 import figureWithIn.EmptyField;
@@ -18,78 +19,78 @@ import positionAndMove.Position;
 public class BoardUtils {
 
 	public static Figure find_whiteKoenig(Board b) {
-		return find_Koenig(b, true);
+		return find_Koenig(b, Team.WHITE);
 	}
 
 	public static Figure find_blackKoenig(Board b) {
-		return find_Koenig(b, false);
+		return find_Koenig(b, Team.BLACK);
 	}
 
 	public static List<Figure> getWhiteFigures(Board b) {
-		return find_figures(b, true);
+		return find_figures(b, Team.WHITE);
 	}
 
 	public static List<Figure> getBlackFigures(Board b) {
-		return find_figures(b, false);
+		return find_figures(b, Team.BLACK);
 	}
 
 	public static List<Figure> threads_byWhite_atPosition(Board b, Position p) {
-		return threats_at_Position(b, p, false);
+		return threats_at_Position(b, p, Team.BLACK);
 	}
 
 	public static List<Figure> threads_byBlack_atPosition(Board b, Position p) {
-		return threats_at_Position(b, p, true);
+		return threats_at_Position(b, p, Team.WHITE);
 	}
 
 	public static boolean is_whiteKoenig_check(Board b) {
-		return is_koenig_check(b, true);
+		return is_koenig_check(b, Team.WHITE);
 	}
 
 	public static boolean is_blackKoenig_check(Board b) {
-		return is_koenig_check(b, false);
+		return is_koenig_check(b, Team.BLACK);
 	}
 
 	public static boolean is_blackKoenig_checkMate(Board b) {
-		return is_checkMate(b, false);
+		return is_checkMate(b, Team.BLACK);
 	}
 
 	public static boolean is_whiteKoenig_checkMate(Board b) {
-		return is_checkMate(b, true);
+		return is_checkMate(b, Team.WHITE);
 	}
 
 	public static List<Move> getWhiteMoves(Board b) {
-		return getMoves_byTeam(b, true);
+		return getMoves_byTeam(b, Team.WHITE);
 	}
 
 	public static List<Move> getBlackMoves(Board b) {
-		return getMoves_byTeam(b, false);
+		return getMoves_byTeam(b, Team.BLACK);
 	}
 
 	public static boolean is_ownKingThreathend_afterMove(Board b, Move m) {
 		b.makeChange(m);
-		boolean illegal = is_koenig_check(b, m.isWhite());
+		boolean illegal = is_koenig_check(b, m.getTeam());
 		b.reverseChange(m);
 		return !illegal;
 	}
 
-	private static Figure find_Koenig(Board b, boolean white) {
+	private static Figure find_Koenig(Board b, Team team) {
 		for (int r = 0; r < 8; r++) {
 			for (int c = 0; c < 8; c++) {
 				Figure f = b.getFigure_at(r, c);
-				if (f instanceof Koenig && f.isWhite() == white) {
+				if (f instanceof Koenig && f.getTeam() == team) {
 					return f;
 				}
 			}
 		}
-		throw new IllegalArgumentException("No Koenig: " + (white ? "white" : "black"));
+		throw new IllegalArgumentException("No Koenig: " + (team == Team.WHITE ? "white" : "black"));
 	}
 
-	private static List<Figure> find_figures(Board b, boolean white) {
+	private static List<Figure> find_figures(Board b, Team team) {
 		List<Figure> f = new ArrayList<Figure>();
 		for (int r = 0; r < 8; r++) {
 			for (int c = 0; c < 8; c++) {
 				Figure rc = b.getFigure_at(r, c);
-				if (!(rc instanceof EmptyField) && rc.isWhite() == white) {
+				if (!(rc instanceof EmptyField) && rc.getTeam() == team) {
 					f.add(rc);
 				}
 			}
@@ -97,34 +98,34 @@ public class BoardUtils {
 		return f;
 	}
 
-	public static boolean is_koenig_check(Board b, boolean isWhite) {
-		Figure koenig = find_Koenig(b, isWhite);
+	public static boolean is_koenig_check(Board b, Team team) {
+		Figure koenig = find_Koenig(b, team);
 
-		return threats_at_Position(b, koenig.getPosition(), isWhite).size() > 0;
+		return threats_at_Position(b, koenig.getPosition(), team).size() > 0;
 
 	}
 
-	public static boolean is_checkMate(Board b, boolean isWhite) {
-		return is_koenig_check(b, isWhite) && (getMoves_byTeam(b, isWhite).isEmpty());
+	public static boolean is_checkMate(Board b, Team team) {
+		return is_koenig_check(b, team) && (getMoves_byTeam(b, team).isEmpty());
 	}
 
-	static List<Figure> threats_at_Position(Board b, Position p, boolean isWhite) {
+	static List<Figure> threats_at_Position(Board b, Position p, Team team) {
 		List<Figure> threats = new LinkedList<Figure>();
-		List<Figure> types_exceptBauer = setUpFigures_exceptBauer_andEmptyField(b, isWhite);
+		List<Figure> types_exceptBauer = setUpFigures_exceptBauer_andEmptyField(b, team);
 
 		threats.addAll(addThreats_forEachFigure_exceptBauer(types_exceptBauer, p));
-		threats.addAll(addThreats_byBauer(b, p, isWhite));
+		threats.addAll(addThreats_byBauer(b, p, team));
 
 		return threats;
 
 	}
 
-	private static List<Figure> setUpFigures_exceptBauer_andEmptyField(Board b, boolean isWhite) {
+	private static List<Figure> setUpFigures_exceptBauer_andEmptyField(Board b, Team team) {
 		List<Figure> types = new ArrayList<Figure>();
-		types.add(new Dame(b, isWhite));
-		types.add(new Laeufer(b, isWhite));
-		types.add(new Turm(b, isWhite));
-		types.add(new Springer(b, isWhite));
+		types.add(new Dame(b, team));
+		types.add(new Laeufer(b, team));
+		types.add(new Turm(b, team));
+		types.add(new Springer(b, team));
 		return types;
 	}
 
@@ -138,7 +139,7 @@ public class BoardUtils {
 
 	private static List<Figure> getThreats_byFigure_exceptBauer(Figure m, Position p) {
 		List<Figure> figure_moves = m.getAccessableFigures(p);
-		figure_moves = GetAccessableFigures.removeFriendlyFigures_and_EmptyFields(figure_moves, m.isWhite());
+		figure_moves = FigureUtils.getHostileFigures(figure_moves, m.getTeam());
 		int i = 0;
 		while (i < figure_moves.size()) {
 			Figure f = figure_moves.get(i);
@@ -151,10 +152,10 @@ public class BoardUtils {
 		return figure_moves;
 	}
 
-	private static List<Figure> addThreats_byBauer(Board b, Position p, boolean isWhite) {
+	private static List<Figure> addThreats_byBauer(Board b, Position p, Team team) {
 		List<Figure> bauer = new LinkedList<Figure>();
-		bauer.addAll(GetAccessableFigures.addAttackFigure_Bauer(b, p.getRow(), p.getCol(), isWhite));
-		bauer = GetAccessableFigures.removeFriendlyFigures_and_EmptyFields(bauer, isWhite);
+		bauer.addAll(GetAccessableFigures.addAttackFigure_Bauer(b, p.getRow(), p.getCol(), team));
+		bauer = FigureUtils.getHostileFigures(bauer, team);
 		int i = 0;
 		while (i < bauer.size()) {
 			Figure f = bauer.get(i);
@@ -167,8 +168,8 @@ public class BoardUtils {
 		return bauer;
 	}
 
-	private static List<Move> getMoves_byTeam(Board b, boolean isWhite) {
-		List<Figure> figures = find_figures(b, isWhite);
+	private static List<Move> getMoves_byTeam(Board b, Team team) {
+		List<Figure> figures = find_figures(b, team);
 		List<Move> m = new LinkedList<Move>();
 		for (Figure f : figures) {
 			m.addAll(f.getMoves());
@@ -186,25 +187,25 @@ public class BoardUtils {
 	}
 
 	public static Figure char_toFigures(Board b, char sign, Position p) {
-		boolean isWhite = Character.isUpperCase(sign);
+		Team team = (Character.isUpperCase(sign)? Team.WHITE: Team.BLACK);
 		sign = Character.toUpperCase(sign);
-		return returnFigure(b, sign, isWhite);
+		return returnFigure(b, sign, team);
 	}
 
-	public static Figure returnFigure(Board b, char type, boolean isWhite) {
+	public static Figure returnFigure(Board b, char type, Team team) {
 		switch (type) {
 		case 'D':
-			return new Dame(b, isWhite);
+			return new Dame(b, team);
 		case 'K':
-			return new Koenig(b, isWhite);
+			return new Koenig(b, team);
 		case 'L':
-			return new Laeufer(b, isWhite);
+			return new Laeufer(b, team);
 		case 'S':
-			return new Springer(b, isWhite);
+			return new Springer(b, team);
 		case 'B':
-			return new Bauer(b, isWhite);
+			return new Bauer(b, team);
 		case 'T':
-			return new Turm(b, isWhite);
+			return new Turm(b, team);
 		case '-':
 			return new EmptyField();
 		default:
@@ -215,5 +216,9 @@ public class BoardUtils {
 
 	public static void changeBoard(Board b, Move m) {
 		b.makeChange(m);
+	}
+	
+	public static void reverseBoard(Board b, Move m) {
+		b.reverseChange(m);
 	}
 }

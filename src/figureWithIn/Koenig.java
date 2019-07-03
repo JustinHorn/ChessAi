@@ -10,9 +10,9 @@ import positionAndMove.Position;
 
 public class Koenig extends Figure{
 	
-	public Koenig(Board b,  boolean isWhite) {
+	public Koenig(Board b, Team team) {
 		super(b);
-		this.isWhite = isWhite;
+		this.team = team;
 		value = Integer.MAX_VALUE;
 		name = "Koenig";
 	}

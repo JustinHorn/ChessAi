@@ -1,8 +1,11 @@
 package Graphics;
 
 import java.awt.GridLayout;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -21,7 +24,8 @@ public class ChessGame extends JFrame {
 	private JChessPanel[][] fields = new JChessPanel[8][8];
 	private Board b;
 	private List<Move> moves;
-
+	private List<Move> movesPlayed = new LinkedList<Move>();
+	
 	public static void main(String... args) {
 		new ChessGame();
 
@@ -31,6 +35,7 @@ public class ChessGame extends JFrame {
 		super("Chess");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		b = new Board();
+		addKeyListener(getNewKeyListener());
 		setBounds(0, 0, 500, 500);
 		setLayout(new GridLayout(8, 8));
 		for (int i = 7; i >= 0; i--) {
@@ -42,6 +47,34 @@ public class ChessGame extends JFrame {
 		}
 		setVisible(true);
 		setEnabled(true);
+	}
+
+	private KeyListener getNewKeyListener() {
+		
+		return new KeyListener() {
+
+			@Override
+			public void keyPressed(KeyEvent key) {
+			
+			}
+
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void keyTyped(KeyEvent key) {
+				if(key.getKeyChar() =='z' ||key.getKeyChar() =='Z') {
+					Move m = movesPlayed.get(movesPlayed.size()-1);
+					BoardUtils.reverseBoard(b, m);
+					movesPlayed.remove(m);
+					makePanelsPassiv_and_updateFigure();
+				}				
+			}
+			
+		};
 	}
 
 	public MouseListener getMouseListener_forPanel(int i, int j) {
@@ -78,7 +111,7 @@ public class ChessGame extends JFrame {
 				deactivate_orActivate_ifNotEmptyField(me,f);
 				
 				if (isAFieldActive_and_amI_not_active_nor_passiv(me)) {
-					makeMove(myP);
+					makeMove_andSafeMove(myP);
 				}
 				repaint();
 			}
@@ -137,10 +170,11 @@ public class ChessGame extends JFrame {
 		}
 	}
 
-	private void makeMove(Position me) {
+	private void makeMove_andSafeMove(Position me) {
 		Move m = getMoveWithPositionTo(me);
 		BoardUtils.changeBoard(b, m);
 		makePanelsPassiv_and_updateFigure();
+		movesPlayed.add(m);
 	}
 
 	private Move getMoveWithPositionTo(Position to) {

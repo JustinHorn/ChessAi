@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import abstractFigure.*;
+import abstractFigure.Figure.Team;
 import figureWithIn.EmptyField;
 import figureWithIn.Koenig;
 import figureWithIn.Turm;
@@ -13,7 +14,7 @@ import positionAndMove.Position;
 public class Board {
 
 	private Figure[][] board = new Figure[8][8];
-	private boolean isWhitesTurn = true;
+	private Team whosTurn = Team.WHITE;
 	private List<Move> movesPlayed = new LinkedList<Move>();
 
 	public Board(Figure[][] b) {
@@ -67,7 +68,7 @@ public class Board {
 
 	public void makeMove(Move m) {
 		if (isMoveLegal(m)) {
-			isWhitesTurn = !isWhitesTurn;
+			setTurn_to_nextTeam();
 			makeChange(m);
 		} else {
 			throw new IllegalArgumentException("Move is not legal: " + m);
@@ -75,18 +76,34 @@ public class Board {
 	}
 
 	public void takeMoveBack(Move m) {
-		isWhitesTurn = !isWhitesTurn;
+		setTurn_to_previousTeam();
 		if (isMoveLegal(m)) {
 		} else {
-			isWhitesTurn = !isWhitesTurn;
+			setTurn_to_previousTeam();
 			makeChange(m);
 			throw new IllegalArgumentException("Move has not been played: " + m);
 		}
 
 	}
+	
+	private void setTurn_to_previousTeam() {
+		whosTurn = getNextTeam(whosTurn);
+	}
+	
+	private void setTurn_to_nextTeam() {
+		whosTurn = getNextTeam(whosTurn);
+	}
+	
+	public static Team getNextTeam(Team team ) {
+		if(team == Team.WHITE) {
+			return  Team.BLACK;
+		} else {
+			return  Team.WHITE;
+		}
+	}
 
 	public boolean isMoveLegal(Move m) {
-		if (isWhitesTurn != m.isWhite()) {
+		if (whosTurn != m.getTeam()) {
 			return false;
 		}
 		List<Move> moves = m.getMovingFigure().getMoves();
@@ -110,7 +127,7 @@ public class Board {
 	protected void makeChange(Move m) {
 		switch (m.getType()) {
 		case EnPassant:
-			board[m.toPosition().getRow() + (m.isWhite() ? -1 : 1)][m.toPosition().getCol()] = new EmptyField();
+			board[m.toPosition().getRow() + (m.getTeam() == Team.WHITE? -1 : 1)][m.toPosition().getCol()] = new EmptyField();
 		case Normal:
 		case Twice:
 			assignFigures_toBoard(m,m.getMovingFigure(),new EmptyField());
@@ -128,7 +145,7 @@ public class Board {
 			
 			break;
 		case BauerTo:
-			Figure whateverTheBauerTurnsTo = BoardUtils.returnFigure(this, m.getTypeModifier(), m.isWhite());
+			Figure whateverTheBauerTurnsTo = BoardUtils.returnFigure(this, m.getTypeModifier(), m.getTeam());
 			assignFigures_toBoard(m,whateverTheBauerTurnsTo,new EmptyField());
 			break;
 		default:
@@ -140,7 +157,7 @@ public class Board {
 	protected void reverseChange(Move m) {
 		switch (m.getType()) {
 		case EnPassant:
-			board[m.toPosition().getRow() + (m.isWhite() ? -1 : 1)][m.toPosition().getCol()] = m.getDefeatedFigure();
+			board[m.toPosition().getRow() + (m.getTeam() == Team.WHITE ? -1 : 1)][m.toPosition().getCol()] = m.getDefeatedFigure();
 			assignFigures_toBoard(m,new EmptyField(),m.getMovingFigure());
 			break;
 		case BauerTo:

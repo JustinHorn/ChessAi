@@ -11,9 +11,9 @@ import positionAndMove.Position;
 
 public class Laeufer extends Figure {
 	
-	public Laeufer(Board b, boolean isWhite) {
+	public Laeufer(Board b, Team team) {
 		super(b);
-		this.isWhite = isWhite;
+		this.team = team;
 		value = 3;
 		name = "Laeufer";
 	}

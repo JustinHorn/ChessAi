@@ -10,9 +10,9 @@ import positionAndMove.Position;
 
 public class Bauer extends Figure {
 
-	public Bauer(Board b, boolean isWhite) {
+	public Bauer(Board b, Team team) {
 		super(b);
-		this.isWhite = isWhite;
+		this.team = team;
 		value = 1;
 		name = "Bauer";
 	}
@@ -24,11 +24,11 @@ public class Bauer extends Figure {
 	
 	@Override
 	public List<Figure> getAccessableFigures(Position p) {
-		return GetAccessableFigures.bauerMovement(getBoard(),p,isWhite);
+		return GetAccessableFigures.bauerMovement(getBoard(),p,team);
 	}
 	
-	public static List<Figure> getAccessableFigures(Board b, Position p, boolean isWhite) {
-		return GetAccessableFigures.bauerMovement(b,p,isWhite);
+	public static List<Figure> getAccessableFigures(Board b, Position p, Team team) {
+		return GetAccessableFigures.bauerMovement(b,p,team);
 	}
 	
 }

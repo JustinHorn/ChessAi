@@ -13,12 +13,27 @@ import positionAndMove.Position;
 
 public abstract class Figure {
 	
-	protected boolean isWhite;
+	protected Team team;
 	private Board board;
 	protected int value;
 	protected String name;
 	private static int count = 0;
 	private final int id;
+	
+	public enum Team {
+		WHITE(0),BLACK(1);
+		
+		private final int i;
+		
+		private Team(int i) {
+			this.i = i;
+		}
+		
+		public int getI() {
+			return i;
+		}
+		
+	}
 	
 	public Figure(Board b) {
 		id = count++;
@@ -55,8 +70,8 @@ public abstract class Figure {
 		return value;
 	}
 	
-	public boolean isWhite() {
-		return isWhite;
+	public Team getTeam() {
+		return team;
 	}
 
 	public String getName() {
@@ -72,7 +87,7 @@ public abstract class Figure {
 			return '-';
 		}
 		char s = name.charAt(0);
-		if(isWhite == false) s = Character.toLowerCase(s);
+		if(team == Team.BLACK) s = Character.toLowerCase(s);
 		return s;
 	}
 }

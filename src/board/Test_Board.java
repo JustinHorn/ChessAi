@@ -8,6 +8,7 @@ import static org.junit.Assert.fail;
 import org.junit.jupiter.api.Test;
 
 import abstractFigure.*;
+import abstractFigure.Figure.Team;
 import figureWithIn.Bauer;
 import figureWithIn.Dame;
 import figureWithIn.EmptyField;
@@ -42,10 +43,10 @@ public class Test_Board {
 		Figure black_king = board.getFigure_at(7, 0);
 
 		assertEquals("Koenig", white_king.getName());
-		assertEquals(true, white_king.isWhite());
+		assertEquals(Team.WHITE, white_king.getTeam());
 
 		assertEquals("Koenig", black_king.getName());
-		assertEquals(false, black_king.isWhite());
+		assertEquals(Team.BLACK, black_king.getTeam());
 
 	}
 
@@ -72,12 +73,12 @@ public class Test_Board {
 		}
 
 		for (Figure a : white_figures) {
-			if (!a.isWhite()) {
+			if (a.getTeam() != Team.WHITE) {
 				fail("white Figure is not white");
 			}
 		}
 		for (Figure a : black_figures) {
-			if (a.isWhite()) {
+			if (a.getTeam() != Team.BLACK) {
 				fail("black Figure is white");
 			}
 		}

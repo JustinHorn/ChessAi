@@ -11,9 +11,9 @@ import positionAndMove.Position;
 
 public class Turm extends Figure{
 	
-	public Turm(Board b,  boolean isWhite) {
+	public Turm(Board b,  Team team) {
 		super(b);
-		this.isWhite = isWhite;
+		this.team = team;
 		value = 5;
 		name = "Turm";
 	}

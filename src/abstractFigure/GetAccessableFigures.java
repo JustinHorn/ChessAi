@@ -1,10 +1,10 @@
 package abstractFigure;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import abstractFigure.Figure.Team;
 import board.Board;
 import figureWithIn.EmptyField;
 import positionAndMove.Position;
@@ -15,25 +15,6 @@ import positionAndMove.Position;
  *         the other figures, that are in its.
  */
 public class GetAccessableFigures {
-	
-	/**
-	 * Also: List = OutputArgument!
-	 * @return 
-	 */
-	public static List<Figure> removeFriendlyFigures_and_EmptyFields(List<Figure> list, boolean white_team_friendly) {
-		List<Figure> hostile = new LinkedList<Figure>();
-		Iterator<Figure> it = list.iterator();
-		while(it.hasNext()) {
-			Figure f = it.next();
-			if ((f instanceof EmptyField) || f.isWhite() == white_team_friendly) {
-				
-			}else {
-				hostile.add(f);
-			}
-		}
-		return hostile;
-	}
-	
 	
 	public static List<Figure> koenigMovement(Figure me) {
 		return koenigMovement(me.getBoard(),me.getPosition());
@@ -122,45 +103,46 @@ public class GetAccessableFigures {
 	}
 
 	public static List<Figure> bauerMovement(Figure me) {
-		return bauerMovement(me.getBoard(), me.getPosition(), me.isWhite());
+		return bauerMovement(me.getBoard(), me.getPosition(), me.getTeam());
 	}
 
-	public static List<Figure> bauerMovement(Board board, Position position, boolean isWhite) {
+	public static List<Figure> bauerMovement(Board board, Position position, Team team) {
 		List<Figure> figures = new LinkedList<Figure>();
 		
-		int edge = (isWhite?6:1);
+		int edge = (team == Team.WHITE?6:1);
 		
 		if( position.getRow() != edge) {
-			int direction = isWhite ? 1 : -1;
-			int r = position.getRow() + direction;
+			int r = position.getRow();
 			int c = position.getCol();
-			figures.addAll(getFigures(board,  r, c, isWhite));
+			figures.addAll(getFigures(board,  r, c, team));
 		}
 		return figures;
 	}
 	
-	private static 	List<Figure> getFigures(Board board,int r,int c, boolean isWhite) {
+	private static 	List<Figure> getFigures(Board board,int r,int c, Team team) {
 		List<Figure> f = new LinkedList<Figure>();
-		Figure figure_infront = board.getFigure_at(r, c);
+		int direction = team == Team.WHITE ? 1 : -1;
+		Figure figure_infront = board.getFigure_at(r+direction, c);
 		if (figure_infront instanceof EmptyField) {
 			f.add(figure_infront);
 		}
-		f.addAll(addAttackFigure_Bauer(board,  r, c, isWhite));
+		f.addAll(addAttackFigure_Bauer(board,  r, c, team));
 		return f;
 	}
 	
-	public static List<Figure> addAttackFigure_Bauer(Board board,int r,int c, boolean isWhite) {
+	public static List<Figure> addAttackFigure_Bauer(Board board,int r,int c, Team team) {
 		List<Figure> f = new LinkedList<Figure>();
-		f.addAll(checkBauer_leftRight_updateFront(board, r, c + 1, isWhite));
-		f.addAll(checkBauer_leftRight_updateFront(board, r, c - 1, isWhite));
+		int direction =( team == Team.WHITE ? 1 : -1);
+		f.addAll(checkBauer_leftRight_updateFront(board, r+direction, c + 1, team));
+		f.addAll(checkBauer_leftRight_updateFront(board, r+direction, c - 1, team));
 		return f;
 	}
 
-	private static List<Figure> checkBauer_leftRight_updateFront(Board b, int r, int c,boolean boolWhite) {
+	private static List<Figure> checkBauer_leftRight_updateFront(Board b, int r, int c,Team team) {
 		List<Figure> figures = new LinkedList<Figure>();
 		if (b.isInBounds(c)) {
 			Figure figure_front_right = b.getFigure_at(r, c);
-			if (!(figure_front_right instanceof EmptyField) && figure_front_right.isWhite() != boolWhite) {
+			if (!(figure_front_right instanceof EmptyField) && figure_front_right.getTeam() != team) {
 				figures.add(figure_front_right);
 			}
 		}
@@ -220,9 +202,9 @@ public class GetAccessableFigures {
 	/**
 	 * Also: List = OutputArgument!
 	 */
-	private static void removeLastElement_if_friendly(List<Figure> list, boolean white_team) {
+	private static void removeLastElement_if_friendly(List<Figure> list, Team team) {
 		Figure last = list.get(list.size() - 1);
-		if (!(last instanceof EmptyField) && (last.isWhite() == white_team)) {
+		if (!(last instanceof EmptyField) && (last.getTeam() == team)) {
 			list.remove(last);
 		}
 	}

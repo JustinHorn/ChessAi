@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import abstractFigure.Figure.Team;
 import board.*;
 import figureWithIn.Bauer;
 import figureWithIn.Dame;
@@ -40,7 +41,7 @@ public class Test_GetFigures_fromPositionTo {
 		List<Figure> upperLeft_Diagonal = GetFigures_fromPositionTo._upperLeftDiagonal_until_includeNotEmptyField(b,white_Dame_position);
 		
 		assertTrue(upperLeft_Diagonal.get(0) instanceof Springer);
-		assertFalse(upperLeft_Diagonal.get(0).isWhite());
+		assertEquals(Team.BLACK,upperLeft_Diagonal.get(0).getTeam());
 	}
 	
 	@Test
@@ -50,7 +51,7 @@ public class Test_GetFigures_fromPositionTo {
 		List<Figure> upperRight_Diagonal = GetFigures_fromPositionTo._upperRightDiagonal_until_includeNotEmptyField(b,white_Dame_position);
 		
 		assertTrue(upperRight_Diagonal.get(0) instanceof Turm);
-		assertTrue(upperRight_Diagonal.get(0).isWhite());
+		assertEquals(Team.WHITE,upperRight_Diagonal.get(0).getTeam());
 	}
 	
 	@Test
@@ -60,7 +61,7 @@ public class Test_GetFigures_fromPositionTo {
 		List<Figure> lowerLeft_Diagonal = GetFigures_fromPositionTo._lowerLeftDiagonal_until_includeNotEmptyField(b,white_Dame_position);
 		
 		assertTrue(lowerLeft_Diagonal.get(0) instanceof Laeufer);
-		assertFalse(lowerLeft_Diagonal.get(0).isWhite());
+		assertEquals(Team.BLACK,lowerLeft_Diagonal.get(0).getTeam());
 	}
 	
 	@Test
@@ -70,7 +71,7 @@ public class Test_GetFigures_fromPositionTo {
 		List<Figure> lowerRight_Diagonal = GetFigures_fromPositionTo._lowerRightDiagonal_until_includeNotEmptyField(b,white_Dame_position);
 		
 		assertTrue(lowerRight_Diagonal.get(0) instanceof Bauer);
-		assertTrue(lowerRight_Diagonal.get(0).isWhite());
+		assertEquals(Team.WHITE,lowerRight_Diagonal.get(0).getTeam());
 	}
 	
 	@Test
@@ -80,7 +81,7 @@ public class Test_GetFigures_fromPositionTo {
 		List<Figure> left_row_fromPosition = GetFigures_fromPositionTo._left_until_includeNotEmptyField(b,white_Dame_position);
 		
 		assertTrue(left_row_fromPosition.get(2) instanceof Bauer);
-		assertFalse(left_row_fromPosition.get(2).isWhite());
+		assertEquals(Team.BLACK,left_row_fromPosition.get(2).getTeam());
 	}
 	
 	@Test
@@ -90,7 +91,7 @@ public class Test_GetFigures_fromPositionTo {
 		List<Figure> right_row_fromPosition = GetFigures_fromPositionTo._right_until_includeNotEmptyField(b,white_Dame_position);
 		
 		assertTrue(right_row_fromPosition.get(1) instanceof Dame);
-		assertFalse(right_row_fromPosition.get(1).isWhite());
+		assertEquals(Team.BLACK,right_row_fromPosition.get(1).getTeam());
 	}
 	
 	
@@ -101,7 +102,7 @@ public class Test_GetFigures_fromPositionTo {
 		List<Figure> upCol_from_position = GetFigures_fromPositionTo._above_until_includeNotEmptyField(b,white_Dame_position);
 		
 		assertTrue(upCol_from_position.get(1) instanceof Springer);
-		assertTrue(upCol_from_position.get(1).isWhite());
+		assertEquals(Team.WHITE,upCol_from_position.get(1).getTeam());
 	}
 	
 	@Test

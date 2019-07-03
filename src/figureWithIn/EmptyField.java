@@ -9,7 +9,7 @@ public class EmptyField extends Figure {
 
 	public EmptyField() {
 		super(null);
-		isWhite = false;
+		team = null;
 		value = 0;
 		name = "EMPTY";
 	}
@@ -25,7 +25,7 @@ public class EmptyField extends Figure {
 	}
 
 	@Override
-	public boolean isWhite() {
+	public Team getTeam() {
 		throw new IllegalAccessError("EmptyField cant be white nor black!");
 	}
 

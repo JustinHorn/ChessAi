@@ -9,9 +9,9 @@ import positionAndMove.Position;
 
 public class Dame extends Figure {
 
-	public Dame(Board b,  boolean isWhite) {
+	public Dame(Board b, Team team) {
 		super(b);
-		this.isWhite = isWhite;
+		this.team = team;
 		value = 9;
 		name = "Dame";
 	}

@@ -11,9 +11,9 @@ import positionAndMove.Position;
 
 public class Springer extends Figure{
 	
-	public Springer(Board b,  boolean isWhite) {
+	public Springer(Board b,  Team team) {
 		super(b);
-		this.isWhite = isWhite;
+		this.team = team;
 		value = 3;
 		name = "Springer";
 	}
