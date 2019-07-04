@@ -1,6 +1,7 @@
 package board;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,62 +19,26 @@ import positionAndMove.Position;
 
 public class BoardUtils {
 
-	public static Figure find_whiteKoenig(Board b) {
-		return find_Koenig(b, Team.WHITE);
-	}
-
-	public static Figure find_blackKoenig(Board b) {
-		return find_Koenig(b, Team.BLACK);
-	}
-
-	public static List<Figure> getWhiteFigures(Board b) {
-		return find_figures(b, Team.WHITE);
-	}
-
-	public static List<Figure> getBlackFigures(Board b) {
-		return find_figures(b, Team.BLACK);
-	}
-
-	public static List<Figure> threads_byWhite_atPosition(Board b, Position p) {
-		return threats_at_Position(b, p, Team.BLACK);
-	}
-
-	public static List<Figure> threads_byBlack_atPosition(Board b, Position p) {
-		return threats_at_Position(b, p, Team.WHITE);
-	}
-
-	public static boolean is_whiteKoenig_check(Board b) {
-		return is_koenig_check(b, Team.WHITE);
-	}
-
-	public static boolean is_blackKoenig_check(Board b) {
-		return is_koenig_check(b, Team.BLACK);
-	}
-
-	public static boolean is_blackKoenig_checkMate(Board b) {
-		return is_checkMate(b, Team.BLACK);
-	}
-
-	public static boolean is_whiteKoenig_checkMate(Board b) {
-		return is_checkMate(b, Team.WHITE);
-	}
-
-	public static List<Move> getWhiteMoves(Board b) {
-		return getMoves_byTeam(b, Team.WHITE);
-	}
-
-	public static List<Move> getBlackMoves(Board b) {
-		return getMoves_byTeam(b, Team.BLACK);
-	}
-
 	public static boolean is_ownKingThreathend_afterMove(Board b, Move m) {
+		//Board b2 = b.copy();
 		b.makeChange(m);
 		boolean illegal = is_koenig_check(b, m.getTeam());
+		//Board b3 = b.copy();
 		b.reverseChange(m);
-		return !illegal;
+		/*if(!(b2.equals(b))) {
+			BoardUtils.displayBoard(b2);
+			System.out.println("||||||||||||||||||||");
+			BoardUtils.displayBoard(b3);
+
+			System.out.println("||||||||||||||||||||");
+
+			BoardUtils.displayBoard(b);
+			System.out.println();
+		}*/
+		return illegal;
 	}
 
-	private static Figure find_Koenig(Board b, Team team) {
+	public static Figure find_Koenig(Board b, Team team) {
 		for (int r = 0; r < 8; r++) {
 			for (int c = 0; c < 8; c++) {
 				Figure f = b.getFigure_at(r, c);
@@ -85,7 +50,7 @@ public class BoardUtils {
 		throw new IllegalArgumentException("No Koenig: " + (team == Team.WHITE ? "white" : "black"));
 	}
 
-	private static List<Figure> find_figures(Board b, Team team) {
+	public static List<Figure> find_figures(Board b, Team team) {
 		List<Figure> f = new ArrayList<Figure>();
 		for (int r = 0; r < 8; r++) {
 			for (int c = 0; c < 8; c++) {
@@ -101,7 +66,7 @@ public class BoardUtils {
 	public static boolean is_koenig_check(Board b, Team team) {
 		Figure koenig = find_Koenig(b, team);
 
-		return threats_at_Position(b, koenig.getPosition(), team).size() > 0;
+		return threats_atPosition_byOtherTeams(b, koenig.getPosition(), team).size() > 0;
 
 	}
 
@@ -109,7 +74,7 @@ public class BoardUtils {
 		return is_koenig_check(b, team) && (getMoves_byTeam(b, team).isEmpty());
 	}
 
-	static List<Figure> threats_at_Position(Board b, Position p, Team team) {
+	public static List<Figure> threats_atPosition_byOtherTeams(Board b, Position p, Team team) {
 		List<Figure> threats = new LinkedList<Figure>();
 		List<Figure> types_exceptBauer = setUpFigures_exceptBauer_andEmptyField(b, team);
 
@@ -168,11 +133,17 @@ public class BoardUtils {
 		return bauer;
 	}
 
-	private static List<Move> getMoves_byTeam(Board b, Team team) {
+	public static List<Move> getMoves_byTeam(Board b, Team team) {
 		List<Figure> figures = find_figures(b, team);
+		figures.sort(new CompareFigures());
 		List<Move> m = new LinkedList<Move>();
 		for (Figure f : figures) {
-			m.addAll(f.getMoves());
+			try {
+				m.addAll(f.getMoves());
+			} catch(Exception e) {
+				e.printStackTrace();
+				System.out.println();
+			}
 		}
 		return m;
 	}
@@ -221,4 +192,19 @@ public class BoardUtils {
 	public static void reverseBoard(Board b, Move m) {
 		b.reverseChange(m);
 	}
+}
+
+final class CompareFigures implements Comparator<Figure> {
+
+	@Override
+	public int compare(Figure f1, Figure f2) {
+		if(f1.getValue() < f2.getValue()) {
+			return +1;
+		}
+		if(f2.getValue() < f1.getValue()) {
+			return -1;
+		}
+		return 0;
+	}
+	
 }

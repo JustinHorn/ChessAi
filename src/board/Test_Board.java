@@ -159,7 +159,7 @@ public class Test_Board {
 				
 		board.makeMove(turm1_schachMatt);		
 		
-		assertTrue(BoardUtils.is_blackKoenig_checkMate(board));
+		assertTrue(BoardUtils.is_checkMate(board, Team.BLACK));
 	}
 	
 	@Test
@@ -180,14 +180,14 @@ public class Test_Board {
 
 	private Board makeChange_board( ) {
 		char[][] charB = new char[8][8];
-		charB[0] = "T--K----".toCharArray();
+		charB[0] = "T---K---".toCharArray();
 		charB[1] = "--B-----".toCharArray();
 		charB[2] = "--------".toCharArray();
 		charB[3] = "-b------".toCharArray();
 		charB[4] = "--------".toCharArray();
 		charB[5] = "--------".toCharArray();
 		charB[6] = "B-------".toCharArray();
-		charB[7] = "---k---t".toCharArray();
+		charB[7] = "----k--t".toCharArray();
 		
 		return new Board(charB);
 		
@@ -198,9 +198,9 @@ public class Test_Board {
 	void test_makeChange_Rochade_white() {
 		Board b = makeChange_board();
 		
-		Koenig white_koenig = (Koenig) b.getFigure_at(0,3);
+		Koenig white_koenig = (Koenig) b.getFigure_at(0,4);
 		Turm white_turm = (Turm) b.getFigure_at(0, 0);
-		Move rochade = new Move(white_koenig,new EmptyField(),new Position(0,3),new Position(0,1),MoveTyp.Rochade,'K');
+		Move rochade = new Move(white_koenig,new EmptyField(),new Position(0,4),new Position(0,1),MoveTyp.Rochade,'D');
 		b.makeChange(rochade);
 		
 		assertEquals(white_koenig,b.getFigure_at(0,1));
@@ -211,9 +211,9 @@ public class Test_Board {
 	void test_makeChange_Rochade_black() {
 		Board b = makeChange_board();
 		
-		Koenig black_koenig = (Koenig) b.getFigure_at(7,3);
+		Koenig black_koenig = (Koenig) b.getFigure_at(7,4);
 		Turm black_turm = (Turm) b.getFigure_at(7, 7);
-		Move rochade = new Move(black_koenig,new EmptyField(),new Position(7,3),new Position(7,5),MoveTyp.Rochade,'D');
+		Move rochade = new Move(black_koenig,new EmptyField(),new Position(7,4),new Position(7,5),MoveTyp.Rochade,'K');
 		b.makeChange(rochade);
 		
 		assertEquals(black_koenig,b.getFigure_at(7,5));
@@ -257,13 +257,13 @@ public class Test_Board {
 	void test_reverseChange_Rochade() {
 		Board b = makeChange_board();
 		
-		Koenig white_koenig = (Koenig) b.getFigure_at(0,3);
+		Koenig white_koenig = (Koenig) b.getFigure_at(0,4);
 		Turm white_turm = (Turm) b.getFigure_at(0, 0);
-		Move rochade = new Move(white_koenig,new EmptyField(),new Position(0,3),new Position(0,1),MoveTyp.Rochade,'K');
+		Move rochade = new Move(white_koenig,new EmptyField(),new Position(0,4),new Position(0,2),MoveTyp.Rochade,'D');
 		b.makeChange(rochade);
 		
 		b.reverseChange(rochade);
-		assertEquals(white_koenig,b.getFigure_at(0,3));
+		assertEquals(white_koenig,b.getFigure_at(0,4));
 		assertEquals(white_turm,b.getFigure_at(0,0));
 	}
 	

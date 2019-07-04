@@ -11,6 +11,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import abstractFigure.*;
+import abstractFigure.Figure.Team;
 import positionAndMove.Move;
 import positionAndMove.MoveTyp;
 import positionAndMove.Position;
@@ -33,14 +34,14 @@ public class Test_BoardUtils {
 	@Test
 	void test_find_King() {
 		Board b = getBasicBoard();
-		Figure white_koenig = BoardUtils.find_whiteKoenig(b);
+		Figure white_koenig = BoardUtils.find_Koenig(b,Team.WHITE);
 		assertEquals(b.getFigure_at(0, 7),white_koenig);	
 	}
 	
 	@Test
 	void test_getWhiteFigures() {
 		Board b = getBasicBoard();
-		List<Figure> white_figures = BoardUtils.getWhiteFigures(b);
+		List<Figure> white_figures = BoardUtils.find_figures(b, Team.WHITE);
 		
 		Figure white_koenig = b.getFigure_at(0, 7);
 		Figure white_laeufer = b.getFigure_at(1, 2);
@@ -61,11 +62,11 @@ public class Test_BoardUtils {
 	@Test
 	void test_getWhiteMoves() {
 		Board b = getBasicBoard();
-		List<Figure> white_figures = BoardUtils.getWhiteFigures(b);
+		List<Figure> white_figures = BoardUtils.find_figures(b, Team.WHITE);
 		List<Move> real_whitemoves = new ArrayList<Move>();
 		white_figures.forEach(f -> real_whitemoves.addAll(f.getMoves()));
 		
-		List<Move> white_moves = BoardUtils.getWhiteMoves(b);
+		List<Move> white_moves = BoardUtils.getMoves_byTeam(b, Team.WHITE);
 		failIf_listAreDifferent(white_moves,real_whitemoves);
 		
 	}
@@ -75,7 +76,7 @@ public class Test_BoardUtils {
 		Board b = getBasicBoard();
 		Position p = new Position(2, 1);
 		
-		List<Figure> white_threats = BoardUtils.threads_byWhite_atPosition(b,p);
+		List<Figure> white_threats = BoardUtils.threats_atPosition_byOtherTeams(b,p,Team.BLACK);
 		
 		Figure white_laeufer = b.getFigure_at(1, 2);
 		Figure white_turm = b.getFigure_at(2, 5);
@@ -102,7 +103,7 @@ public class Test_BoardUtils {
 	void is_whiteKoenig_check() {
 		Board b = getBasicBoard();
 		
-		boolean isCheck = BoardUtils.is_whiteKoenig_check(b);
+		boolean isCheck = BoardUtils.is_koenig_check(b, Team.WHITE);
 		assertTrue(isCheck);
 	}
 	
@@ -110,7 +111,7 @@ public class Test_BoardUtils {
 	void is_whiteKoenig_checkMate() {
 		Board b = getBasicBoard();
 		
-		boolean isCheckMate = BoardUtils.is_whiteKoenig_checkMate(b);
+		boolean isCheckMate = BoardUtils.is_checkMate(b, Team.WHITE);
 		assertTrue(isCheckMate);
 	}
 	

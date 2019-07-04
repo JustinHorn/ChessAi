@@ -33,14 +33,25 @@ public class Board {
 
 	public Board() {
 		char[][] b = new char[8][8];
-		b[0] = "TSLKDLST".toCharArray();
+		b[0] = "TSLDKLST".toCharArray();
 		b[1] = "BBBBBBBB".toCharArray();
 		b[2] = "--------".toCharArray();
 		b[3] = "--------".toCharArray();
 		b[4] = "--------".toCharArray();
 		b[5] = "--------".toCharArray();
 		b[6] = "bbbbbbbb".toCharArray();
-		b[7] = "tslkdlst".toCharArray();
+		b[7] = "tsldklst".toCharArray();
+		/**//*
+		char[][] b = new char[8][8];
+		b[0] = "T--DKL-T".toCharArray();
+		b[1] = "--BL-BBB".toCharArray();
+		b[2] = "B-S--S--".toCharArray();
+		b[3] = "-B--B---".toCharArray();
+		b[4] = "--------".toCharArray();
+		b[5] = "blbd----".toCharArray();
+		b[6] = "-b---bbb".toCharArray();
+		b[7] = "tsl-k-st".toCharArray();
+		/**/
 		board = setBoard_from_charArray(b);	
 	}
 
@@ -68,7 +79,6 @@ public class Board {
 
 	public void makeMove(Move m) {
 		if (isMoveLegal(m)) {
-			setTurn_to_nextTeam();
 			makeChange(m);
 		} else {
 			throw new IllegalArgumentException("Move is not legal: " + m);
@@ -76,10 +86,9 @@ public class Board {
 	}
 
 	public void takeMoveBack(Move m) {
-		setTurn_to_previousTeam();
+		reverseChange(m);
 		if (isMoveLegal(m)) {
 		} else {
-			setTurn_to_previousTeam();
 			makeChange(m);
 			throw new IllegalArgumentException("Move has not been played: " + m);
 		}
@@ -100,6 +109,10 @@ public class Board {
 		} else {
 			return  Team.WHITE;
 		}
+	}
+	
+	public  Team getWhosTurn() {
+		return whosTurn;
 	}
 
 	public boolean isMoveLegal(Move m) {
@@ -133,12 +146,12 @@ public class Board {
 			assignFigures_toBoard(m,m.getMovingFigure(),new EmptyField());
 			break;
 		case Rochade:
-			int lOrR = (m.getTypeModifier() == 'K' ? +1 : -1);
-			Turm turm = (Turm) getFigure_at(m.fromPosition().getRow(), (m.getTypeModifier() == 'K' ? 0 : 7));
-			Koenig koenig = (Koenig) getFigure_at(m.fromPosition().getRow(), 3);
+			int lOrR = (m.getTypeModifier() == 'D' ? +1 : -1);
+			Turm turm = (Turm) getFigure_at(m.fromPosition().getRow(), (m.getTypeModifier() == 'D' ? 0 : 7));
+			Koenig koenig = (Koenig) getFigure_at(m.fromPosition().getRow(), 4);
 			
 			board[m.fromPosition().getRow()][m.fromPosition().getCol()] = new EmptyField();
-			board[m.fromPosition().getRow()][(m.getTypeModifier() == 'K' ? 0 : 7)]= new EmptyField();
+			board[m.fromPosition().getRow()][(m.getTypeModifier() == 'D' ? 0 : 7)]= new EmptyField();
 			
 			board[m.fromPosition().getRow()][m.toPosition().getCol()] = koenig;
 			board[m.fromPosition().getRow()][m.toPosition().getCol() + lOrR] = turm;
@@ -151,6 +164,7 @@ public class Board {
 		default:
 			throw new IllegalArgumentException("Something happend to that move");
 		}
+		setTurn_to_nextTeam();
 		movesPlayed.add(m);
 	}
 
@@ -166,20 +180,21 @@ public class Board {
 			assignFigures_toBoard(m,m.getDefeatedFigure(),m.getMovingFigure());
 			break;
 		case Rochade:
-			int lOrR = (m.getTypeModifier() == 'K' ? +1 : -1);
+			int lOrR = (m.getTypeModifier() == 'D' ? +1 : -1);
 
 			Turm turm = (Turm) getFigure_at(m.fromPosition().getRow(), m.toPosition().getCol() + lOrR);
-			Koenig koenig = (Koenig) getFigure_at(m.fromPosition().getRow(), 3-2*lOrR);
+			Koenig koenig = (Koenig) getFigure_at(m.fromPosition().getRow(), 4-2*lOrR);
 			
 			board[m.fromPosition().getRow()][m.toPosition().getCol()] = new EmptyField();
 			board[m.fromPosition().getRow()][m.toPosition().getCol() + lOrR] = new EmptyField();
 			
 			board[m.fromPosition().getRow()][m.fromPosition().getCol()] = koenig;
-			board[m.fromPosition().getRow()][(m.getTypeModifier() == 'K' ? 0 : 7)] = turm;
+			board[m.fromPosition().getRow()][(m.getTypeModifier() == 'D' ? 0 : 7)] = turm;
 			break;
 		default:
 			throw new IllegalArgumentException("Something happend to that move");
 		}
+		setTurn_to_previousTeam();
 		movesPlayed.remove(m);
 	}
 	
@@ -196,6 +211,7 @@ public class Board {
 				}
 			}
 		}
+		BoardUtils.displayBoard(this);
 		throw new IllegalArgumentException("No Figure with Id: " + figureID);
 	}
 	
@@ -221,5 +237,16 @@ public class Board {
 			return true;
 		}
 		return false;
+	}
+	
+	public Board copy() {
+		Figure[][] f = new Figure[8][8];
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				f[i][j] = getFigure_at(i,j);
+			}
+		}
+		return new Board(f);
+		
 	}
 }

@@ -41,8 +41,8 @@ public class GetSpecialMoves_FromBoard {
 	private static List<Move> get_ifPossible_rochadeMove(Board b, Figure me, Position myP, boolean leftOrRight) {
 		LinkedList<Move> m = new LinkedList<Move>();
 		if (rochadePossible(b, me, myP, leftOrRight)) {
-			m.add(new Move(me, new EmptyField(), myP, new Position(myP.getRow(), 3 + (leftOrRight ? -2 : +2)), MoveTyp.Rochade,
-					(leftOrRight ? 'K' : 'D')));
+			m.add(new Move(me, new EmptyField(), myP, new Position(myP.getRow(), 4 + (leftOrRight ? -2 : +2)), MoveTyp.Rochade,
+					(leftOrRight ? 'D' : 'K')));
 		}
 		return m;
 	}
@@ -83,11 +83,11 @@ public class GetSpecialMoves_FromBoard {
 	private static boolean are_fields_unthreadend(Board b, List<Figure> horizontalLineOfFigures, Team team) {
 		List<Position> pos = horizontalLineOfFigures.stream().map(f -> b.getPosition_of_FigureWithId(f.getId()))
 				.collect(Collectors.toCollection(LinkedList<Position>::new));
-			if (BoardUtils.threats_at_Position(b, pos.get(0), team).size() != 0) {
+			if (BoardUtils.threats_atPosition_byOtherTeams(b, pos.get(0), team).size() != 0) {
 				return false;
 			}
 			
-			if (BoardUtils.threats_at_Position(b, pos.get(1), team).size() != 0) {
+			if (BoardUtils.threats_atPosition_byOtherTeams(b, pos.get(1), team).size() != 0) {
 				return false;
 			} 
 		
@@ -102,7 +102,7 @@ public class GetSpecialMoves_FromBoard {
 	
 		if (b.hasLastMove()) {
 			Move lastMove = b.getLastMove();
-			if (lastMove.getType() == MoveTyp.Twice) {
+			if (lastMove.getType() == MoveTyp.Twice && lastMove.getTeam() != me.getTeam()) {
 				Position bauer_twice = b.getPosition_of_FigureWithId(lastMove.getMovingFigure().getId());
 				int bTCol = bauer_twice.getCol();
 				int bTRow = bauer_twice.getRow();

@@ -16,8 +16,6 @@ public class Dame extends Figure {
 		name = "Dame";
 	}
 
-
-
 	@Override
 	public List<Figure> getAccessableFigures() {
 		return GetAccessableFigures.dameMovement(this);

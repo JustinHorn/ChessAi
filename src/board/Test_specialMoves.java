@@ -14,37 +14,37 @@ import positionAndMove.Position;
 public class Test_specialMoves {
 	private Board getBasic_specialMove_Board() {
 		char[][] b = new char[8][8];
-		b[0] = "T--K----".toCharArray();
+		b[0] = "T---K---".toCharArray();
 		b[1] = "---B----".toCharArray();
 		b[2] = "--------".toCharArray();
 		b[3] = "--b-----".toCharArray();
 		b[4] = "--------".toCharArray();
 		b[5] = "--------".toCharArray();
 		b[6] = "B-------".toCharArray();
-		b[7] = "---k---t".toCharArray();
+		b[7] = "----k--t".toCharArray();
 		return new Board(b);
 	}
 	
 	@Test
 	void test_getSpecialMoves_forMe_white_king() {
 		Board b = getBasic_specialMove_Board();
-		Figure white_koenig = b.getFigure_at(0, 3);
+		Figure white_koenig = b.getFigure_at(0, 4);
 		
 		List<Move> sM = GetSpecialMoves_FromBoard.getMySpecialMoves(b, white_koenig);
 		assertEquals(1,sM.size());
 		assertEquals(MoveTyp.Rochade,sM.get(0).getType());
-		assertEquals('K',sM.get(0).getTypeModifier());
+		assertEquals('D',sM.get(0).getTypeModifier());
 	}
 	
 	@Test
 	void test_getSpecialMoves_forMe_black_king() {
 		Board b = getBasic_specialMove_Board();
-		Figure black_koenig = b.getFigure_at(7, 3);
+		Figure black_koenig = b.getFigure_at(7, 4);
 		
 		List<Move> sM = GetSpecialMoves_FromBoard.getMySpecialMoves(b, black_koenig);
 		assertEquals(1,sM.size());
 		assertEquals(MoveTyp.Rochade,sM.get(0).getType());
-		assertEquals('D',sM.get(0).getTypeModifier());
+		assertEquals('K',sM.get(0).getTypeModifier());
 	}
 	
 	@Test
