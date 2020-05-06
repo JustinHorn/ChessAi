@@ -16,7 +16,7 @@ import positionAndMove.Move;
 import positionAndMove.MoveTyp;
 import positionAndMove.Position;
 
-public class Test_BoardUtils {
+public class TestBoardUtils {
 	
 	private Board getBasicBoard() {
 		char[][] b = new char[8][8];

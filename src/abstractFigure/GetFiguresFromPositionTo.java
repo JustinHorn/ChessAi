@@ -8,7 +8,7 @@ import figureWithIn.EmptyField;
 import positionAndMove.Move;
 import positionAndMove.Position;
 
-public class GetFigures_fromPositionTo {
+public class GetFiguresFromPositionTo {
 
 
 

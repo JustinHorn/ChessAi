@@ -135,7 +135,6 @@ public class BoardUtils {
 
 	public static List<Move> getMoves_byTeam(Board b, Team team) {
 		List<Figure> figures = find_figures(b, team);
-		figures.sort(new CompareFigures());
 		List<Move> m = new LinkedList<Move>();
 		for (Figure f : figures) {
 			try {

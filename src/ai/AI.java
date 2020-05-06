@@ -1,6 +1,7 @@
 package ai;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import abstractFigure.Figure.*;
@@ -10,16 +11,21 @@ import positionAndMove.*;
 
 public class AI {
 
-	public static ValueAndMove_Container calc(Board b, int maxDepth,int currentDepth, double betterThanThisWontBeTaken) {
+	public static int count = 0;
+	
+	public static ValueAndMoveContainer calc(Board b, int maxDepth,int currentDepth, double betterThanThisWontBeTaken) {
 		Team t = b.getWhosTurn();
 		List<Move> children = BoardUtils.getMoves_byTeam(b, t);
 		if(children.size() > 0 && maxDepth > currentDepth) {
-			ValueAndMove_Container marker = new ValueAndMove_Container(Integer.MIN_VALUE);
+			//children.sort(new CompareMoves());
+			ValueAndMoveContainer marker = new ValueAndMoveContainer(Integer.MIN_VALUE);
+			marker.addMove(children.get(0));
 			double currentMax = Integer.MIN_VALUE;
 			currentDepth++;
 			for(Move m: children) {
+				count++;
 				BoardUtils.changeBoard(b, m);
-				ValueAndMove_Container w=  calc( b,  maxDepth, currentDepth,-1* currentMax);
+				ValueAndMoveContainer w=  calc( b,  maxDepth, currentDepth,-1* currentMax);
 				BoardUtils.reverseBoard(b, m);
 				w.invertValue();
 				w.addMove(m);
@@ -35,15 +41,24 @@ public class AI {
 			return marker;
 		} else {
 			if(BoardUtils.is_checkMate(b,t)) {
-				return new ValueAndMove_Container(Integer.MIN_VALUE);
+				return new ValueAndMoveContainer(Integer.MIN_VALUE);
 			} else {
-				return new ValueAndMove_Container(calcValue(b));
+				return new ValueAndMoveContainer(calcValue(b));
 			}
 		}
 		
 	}
 	
+	public static void setCount() {
+		count = 0;
+	}
+	
+	public static int getCount() {
+		return count;
+	}
+	
 	public static double calcValue(Board b) {
+		long time = System.currentTimeMillis();
 		List<Figure> figures =BoardUtils.find_figures(b, b.getWhosTurn());
 		List<Figure> otherFigures =BoardUtils.find_figures(b, b.getNextTeam(b.getWhosTurn()));
 
@@ -63,9 +78,24 @@ public class AI {
 		m.addAll(BoardUtils.getMoves_byTeam(b,  b.getNextTeam(b.getWhosTurn())));
 		v-= m.size()/otherFigures.size();
 		
-		
 		return  v;
 	}
 	
+
+	
+}
+
+final class CompareMoves implements Comparator<Move> {
+
+	@Override
+	public int compare(Move m1, Move m2) {
+		if(m1.getDefeatedFigure().getValue() < m2.getDefeatedFigure().getValue()) {
+			return +1;
+		}
+		if(m1.getDefeatedFigure().getValue() > m2.getDefeatedFigure().getValue()) {
+			return -1;
+		}
+		return 0;
+	}
 	
 }

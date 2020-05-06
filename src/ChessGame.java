@@ -15,7 +15,7 @@ import Graphics.JChessPanel;
 import Graphics.JChessPanel.Appearance;
 import abstractFigure.Figure;
 import ai.AI;
-import ai.ValueAndMove_Container;
+import ai.ValueAndMoveContainer;
 import board.Board;
 import board.BoardUtils;
 import figureWithIn.EmptyField;
@@ -181,12 +181,15 @@ public class ChessGame extends JFrame {
 		makePanelsPassiv_and_updateFigure();
 		movesPlayed.add(m);
 		if(isAiActive) {
-		ValueAndMove_Container vMC = AI.calc(b, 5, 0, Integer.MAX_VALUE);
-		BoardUtils.changeBoard(b, vMC.getLastMove());
-		makePanelsPassiv_and_updateFigure();
-		movesPlayed.add(vMC.getLastMove());
+			ValueAndMoveContainer vMC = AI.calc(b, 5, 0, Integer.MAX_VALUE);
+			BoardUtils.changeBoard(b, vMC.getLastMove());
+			makePanelsPassiv_and_updateFigure();
+			movesPlayed.add(vMC.getLastMove());
 		}
-		System.out.println(System.currentTimeMillis()-time);
+		System.out.println((System.currentTimeMillis()-time)/1000);
+		System.out.println(AI.getCount());
+
+		AI.setCount();
 	}
 
 	private Move getMoveWithPositionTo(Position to) {

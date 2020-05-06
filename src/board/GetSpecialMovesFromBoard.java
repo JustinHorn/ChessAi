@@ -10,7 +10,7 @@ import figureWithIn.*;
 
 import positionAndMove.*;
 
-public class GetSpecialMoves_FromBoard {
+public class GetSpecialMovesFromBoard {
 
 	public static List<Move> getMySpecialMoves(Board b, Figure me) {
 		Position myP = b.getPosition_of_FigureWithId(me.getId());
@@ -50,9 +50,9 @@ public class GetSpecialMoves_FromBoard {
 	private static boolean rochadePossible(Board b, Figure me, Position myP, boolean leftOrRight) {
 		List<Figure> figures;
 		if (leftOrRight) {
-			figures = GetFigures_fromPositionTo._left_until_includeNotEmptyField(b, myP);
+			figures = GetFiguresFromPositionTo._left_until_includeNotEmptyField(b, myP);
 		} else {
-			figures = GetFigures_fromPositionTo._right_until_includeNotEmptyField(b, myP);
+			figures = GetFiguresFromPositionTo._right_until_includeNotEmptyField(b, myP);
 		}
 		return isTurmAlright(b, me, figures,leftOrRight) && areRochadeFieldsEmpty(figures)
 				&& are_fields_unthreadend(b, figures, me.getTeam());

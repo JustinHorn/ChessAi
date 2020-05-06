@@ -120,7 +120,7 @@ public class Board {
 			return false;
 		}
 		List<Move> moves = m.getMovingFigure().getMoves();
-		moves.addAll(GetSpecialMoves_FromBoard.getMySpecialMoves(this,m.getMovingFigure()));
+		moves.addAll(GetSpecialMovesFromBoard.getMySpecialMoves(this,m.getMovingFigure()));
 		if (!moves.contains(m)) {
 			return false;
 		}

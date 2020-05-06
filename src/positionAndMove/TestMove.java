@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import board.Board;
 
-public class Test_Move {
+public class TestMove {
 
 	Board b = new Board();
 

@@ -43,7 +43,7 @@ public abstract class Figure {
 	
 	public List<Move> getMoves() {
 		List<Move> moves = FigureUtils.movesInRange(this);
-		moves.addAll(GetSpecialMoves_FromBoard.getMySpecialMoves(board, this));
+		moves.addAll(GetSpecialMovesFromBoard.getMySpecialMoves(board, this));
 		moves = moves.stream().filter(m -> !BoardUtils.is_ownKingThreathend_afterMove(this.board, m)).collect(Collectors.toCollection(LinkedList<Move>::new));
 		return moves;
 	}

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import board.Board;
 import figureWithIn.EmptyField;
 
-public class Test_GetAccessableFigures {
+public class TestGetAccessableFigures {
 	
 	private Board basicBoard() {
 		char[][] b = new char[8][8];

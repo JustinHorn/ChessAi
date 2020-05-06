@@ -20,7 +20,7 @@ import positionAndMove.Move;
 import positionAndMove.MoveTyp;
 import positionAndMove.Position;
 
-public class Test_Board {
+public class TestBoard {
 
 	private Board basicBoard() {
 		char[][] b = new char[8][8];

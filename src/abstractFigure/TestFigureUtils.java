@@ -12,7 +12,7 @@ import figureWithIn.Laeufer;
 import positionAndMove.Move;
 
 
-public class Test_FigureUtils {
+public class TestFigureUtils {
 
 	private Board basicBoard() {
 		char[][] b = new char[8][8];

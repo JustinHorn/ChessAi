@@ -17,7 +17,7 @@ import figureWithIn.Springer;
 import figureWithIn.Turm;
 import positionAndMove.Position;
 
-public class Test_GetFigures_fromPositionTo {
+public class TestGetFiguresFromPositionTo {
 
 	private Board basicBoard() {
 		char[][] b = new char[8][8];
@@ -38,7 +38,7 @@ public class Test_GetFigures_fromPositionTo {
 	void _upperLeftDiagonal_until_includeNotEmptyField() {
 		Board b = basicBoard();	
 		Position white_Dame_position = new Position(3,4);
-		List<Figure> upperLeft_Diagonal = GetFigures_fromPositionTo._upperLeftDiagonal_until_includeNotEmptyField(b,white_Dame_position);
+		List<Figure> upperLeft_Diagonal = GetFiguresFromPositionTo._upperLeftDiagonal_until_includeNotEmptyField(b,white_Dame_position);
 		
 		assertTrue(upperLeft_Diagonal.get(0) instanceof Springer);
 		assertEquals(Team.BLACK,upperLeft_Diagonal.get(0).getTeam());
@@ -48,7 +48,7 @@ public class Test_GetFigures_fromPositionTo {
 	void _upperRightDiagonal_until_includeNotEmptyField() {
 		Board b = basicBoard();	
 		Position white_Dame_position = new Position(3,4);
-		List<Figure> upperRight_Diagonal = GetFigures_fromPositionTo._upperRightDiagonal_until_includeNotEmptyField(b,white_Dame_position);
+		List<Figure> upperRight_Diagonal = GetFiguresFromPositionTo._upperRightDiagonal_until_includeNotEmptyField(b,white_Dame_position);
 		
 		assertTrue(upperRight_Diagonal.get(0) instanceof Turm);
 		assertEquals(Team.WHITE,upperRight_Diagonal.get(0).getTeam());
@@ -58,7 +58,7 @@ public class Test_GetFigures_fromPositionTo {
 	void _lowerLeftDiagonal_until_includeNotEmptyField() {
 		Board b = basicBoard();	
 		Position white_Dame_position = new Position(3,4);
-		List<Figure> lowerLeft_Diagonal = GetFigures_fromPositionTo._lowerLeftDiagonal_until_includeNotEmptyField(b,white_Dame_position);
+		List<Figure> lowerLeft_Diagonal = GetFiguresFromPositionTo._lowerLeftDiagonal_until_includeNotEmptyField(b,white_Dame_position);
 		
 		assertTrue(lowerLeft_Diagonal.get(0) instanceof Laeufer);
 		assertEquals(Team.BLACK,lowerLeft_Diagonal.get(0).getTeam());
@@ -68,7 +68,7 @@ public class Test_GetFigures_fromPositionTo {
 	void _lowerRightDiagonal_until_includeNotEmptyField() {
 		Board b = basicBoard();	
 		Position white_Dame_position = new Position(3,4);
-		List<Figure> lowerRight_Diagonal = GetFigures_fromPositionTo._lowerRightDiagonal_until_includeNotEmptyField(b,white_Dame_position);
+		List<Figure> lowerRight_Diagonal = GetFiguresFromPositionTo._lowerRightDiagonal_until_includeNotEmptyField(b,white_Dame_position);
 		
 		assertTrue(lowerRight_Diagonal.get(0) instanceof Bauer);
 		assertEquals(Team.WHITE,lowerRight_Diagonal.get(0).getTeam());
@@ -78,7 +78,7 @@ public class Test_GetFigures_fromPositionTo {
 	void _left_until_includeNotEmptyField() {
 		Board b = basicBoard();	
 		Position white_Dame_position = new Position(3,4);
-		List<Figure> left_row_fromPosition = GetFigures_fromPositionTo._left_until_includeNotEmptyField(b,white_Dame_position);
+		List<Figure> left_row_fromPosition = GetFiguresFromPositionTo._left_until_includeNotEmptyField(b,white_Dame_position);
 		
 		assertTrue(left_row_fromPosition.get(2) instanceof Bauer);
 		assertEquals(Team.BLACK,left_row_fromPosition.get(2).getTeam());
@@ -88,7 +88,7 @@ public class Test_GetFigures_fromPositionTo {
 	void _right_until_includeNotEmptyField() {
 		Board b = basicBoard();	
 		Position white_Dame_position = new Position(3,4);
-		List<Figure> right_row_fromPosition = GetFigures_fromPositionTo._right_until_includeNotEmptyField(b,white_Dame_position);
+		List<Figure> right_row_fromPosition = GetFiguresFromPositionTo._right_until_includeNotEmptyField(b,white_Dame_position);
 		
 		assertTrue(right_row_fromPosition.get(1) instanceof Dame);
 		assertEquals(Team.BLACK,right_row_fromPosition.get(1).getTeam());
@@ -99,7 +99,7 @@ public class Test_GetFigures_fromPositionTo {
 	void _above_until_includeNotEmptyField() {
 		Board b = basicBoard();	
 		Position white_Dame_position = new Position(3,4);
-		List<Figure> upCol_from_position = GetFigures_fromPositionTo._above_until_includeNotEmptyField(b,white_Dame_position);
+		List<Figure> upCol_from_position = GetFiguresFromPositionTo._above_until_includeNotEmptyField(b,white_Dame_position);
 		
 		assertTrue(upCol_from_position.get(1) instanceof Springer);
 		assertEquals(Team.WHITE,upCol_from_position.get(1).getTeam());
@@ -109,7 +109,7 @@ public class Test_GetFigures_fromPositionTo {
 	void _under_fromPosition_until_includeNotEmptyField() {
 		Board b = basicBoard();	
 		Position white_Dame_position = new Position(3,4);
-		List<Figure> downCol_from_position = GetFigures_fromPositionTo._under_until_includeNotEmptyField(b,white_Dame_position);
+		List<Figure> downCol_from_position = GetFiguresFromPositionTo._under_until_includeNotEmptyField(b,white_Dame_position);
 		
 		assertEquals(4,downCol_from_position.size());
 	}

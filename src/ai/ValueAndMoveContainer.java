@@ -5,13 +5,13 @@ import java.util.List;
 
 import positionAndMove.*;
 
-public class ValueAndMove_Container {
+public class ValueAndMoveContainer {
 	
 	private double value;
 	private List<Move> moves= new LinkedList<Move>();
 	
 	
-	public ValueAndMove_Container(double value) {
+	public ValueAndMoveContainer(double value) {
 		this.value=value;
 	}
 	

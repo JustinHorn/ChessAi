@@ -166,9 +166,9 @@ public class GetAccessableFigures {
 	}
 
 	public static List<Figure> rightToLeftDiagonal(Board board, Position p) {
-		List<Figure> lower_left = GetFigures_fromPositionTo._lowerLeftDiagonal_until_includeNotEmptyField(board,
+		List<Figure> lower_left = GetFiguresFromPositionTo._lowerLeftDiagonal_until_includeNotEmptyField(board,
 				p);
-		List<Figure> upper_right = GetFigures_fromPositionTo._upperRightDiagonal_until_includeNotEmptyField(board,
+		List<Figure> upper_right = GetFiguresFromPositionTo._upperRightDiagonal_until_includeNotEmptyField(board,
 				p);
 
 		lower_left.addAll(upper_right);
@@ -176,24 +176,24 @@ public class GetAccessableFigures {
 	}
 
 	public static List<Figure> leftToRightDiagonal(Board b, Position p) {
-		List<Figure> upper_left = GetFigures_fromPositionTo._upperLeftDiagonal_until_includeNotEmptyField(b, p);
-		List<Figure> lower_right = GetFigures_fromPositionTo._lowerRightDiagonal_until_includeNotEmptyField(b, p);
+		List<Figure> upper_left = GetFiguresFromPositionTo._upperLeftDiagonal_until_includeNotEmptyField(b, p);
+		List<Figure> lower_right = GetFiguresFromPositionTo._lowerRightDiagonal_until_includeNotEmptyField(b, p);
 
 		upper_left.addAll(lower_right);
 		return upper_left;
 	}
 
 	public static List<Figure> vertical(Board b, Position p) {
-		List<Figure> above = GetFigures_fromPositionTo._above_until_includeNotEmptyField(b, p);
-		List<Figure> under = GetFigures_fromPositionTo._under_until_includeNotEmptyField(b, p);
+		List<Figure> above = GetFiguresFromPositionTo._above_until_includeNotEmptyField(b, p);
+		List<Figure> under = GetFiguresFromPositionTo._under_until_includeNotEmptyField(b, p);
 
 		above.addAll(under);
 		return above;
 	}
 
 	public static List<Figure> horizontal(Board b, Position p) {
-		List<Figure> left = GetFigures_fromPositionTo._left_until_includeNotEmptyField(b, p);
-		List<Figure> right = GetFigures_fromPositionTo._right_until_includeNotEmptyField(b, p);
+		List<Figure> left = GetFiguresFromPositionTo._left_until_includeNotEmptyField(b, p);
+		List<Figure> right = GetFiguresFromPositionTo._right_until_includeNotEmptyField(b, p);
 
 		left.addAll(right);
 		return left;

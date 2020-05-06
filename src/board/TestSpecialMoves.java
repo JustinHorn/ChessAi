@@ -11,7 +11,7 @@ import positionAndMove.Move;
 import positionAndMove.MoveTyp;
 import positionAndMove.Position;
 
-public class Test_specialMoves {
+public class TestSpecialMoves {
 	private Board getBasic_specialMove_Board() {
 		char[][] b = new char[8][8];
 		b[0] = "T---K---".toCharArray();
@@ -30,7 +30,7 @@ public class Test_specialMoves {
 		Board b = getBasic_specialMove_Board();
 		Figure white_koenig = b.getFigure_at(0, 4);
 		
-		List<Move> sM = GetSpecialMoves_FromBoard.getMySpecialMoves(b, white_koenig);
+		List<Move> sM = GetSpecialMovesFromBoard.getMySpecialMoves(b, white_koenig);
 		assertEquals(1,sM.size());
 		assertEquals(MoveTyp.Rochade,sM.get(0).getType());
 		assertEquals('D',sM.get(0).getTypeModifier());
@@ -41,7 +41,7 @@ public class Test_specialMoves {
 		Board b = getBasic_specialMove_Board();
 		Figure black_koenig = b.getFigure_at(7, 4);
 		
-		List<Move> sM = GetSpecialMoves_FromBoard.getMySpecialMoves(b, black_koenig);
+		List<Move> sM = GetSpecialMovesFromBoard.getMySpecialMoves(b, black_koenig);
 		assertEquals(1,sM.size());
 		assertEquals(MoveTyp.Rochade,sM.get(0).getType());
 		assertEquals('K',sM.get(0).getTypeModifier());
@@ -52,7 +52,7 @@ public class Test_specialMoves {
 		Board b = getBasic_specialMove_Board();
 		Figure white_bauer = b.getFigure_at(1, 3);
 		
-		List<Move> sM = GetSpecialMoves_FromBoard.getMySpecialMoves(b, white_bauer);
+		List<Move> sM = GetSpecialMovesFromBoard.getMySpecialMoves(b, white_bauer);
 		assertEquals(1,sM.size());
 		assertEquals(MoveTyp.Twice,sM.get(0).getType());
 		assertEquals('-',sM.get(0).getTypeModifier());
@@ -65,11 +65,11 @@ public class Test_specialMoves {
 		Board b = getBasic_specialMove_Board();
 		Figure white_bauer = b.getFigure_at(1, 3);
 		
-		List<Move> sM = GetSpecialMoves_FromBoard.getMySpecialMoves(b, white_bauer);
+		List<Move> sM = GetSpecialMovesFromBoard.getMySpecialMoves(b, white_bauer);
 		b.makeChange(sM.get(0));
 		
 		Figure black_bauer = b.getFigure_at(3,2);
-		sM = GetSpecialMoves_FromBoard.getMySpecialMoves(b, black_bauer);
+		sM = GetSpecialMovesFromBoard.getMySpecialMoves(b, black_bauer);
 		
 		assertEquals(1,sM.size());
 		assertEquals(MoveTyp.EnPassant,sM.get(0).getType());
@@ -83,7 +83,7 @@ public class Test_specialMoves {
 		Board b = getBasic_specialMove_Board();
 		Figure white_bauer_near_end = b.getFigure_at(6, 0);
 		
-		List<Move> sM = GetSpecialMoves_FromBoard.getMySpecialMoves(b, white_bauer_near_end);		
+		List<Move> sM = GetSpecialMovesFromBoard.getMySpecialMoves(b, white_bauer_near_end);		
 		
 		assertEquals(4,sM.size());
 		assertEquals(MoveTyp.BauerTo,sM.get(0).getType());
